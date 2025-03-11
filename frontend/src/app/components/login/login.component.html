@@ -1,0 +1,14 @@
+<form [formGroup]="form" (ngSubmit)="processLogin($event)" >
+    <p-floatlabel variant="on">
+        <input pInputText id="username" formControlName="username" pSize="small" variant="filled">
+        <label for="username">Username</label>
+    </p-floatlabel>
+    
+    <p-floatlabel variant="on">
+        <p-password formControlName="password" [toggleMask]="true" size="small" variant="filled" [feedback]="false"></p-password>
+        <label for="pasword">Password</label>
+    </p-floatlabel>
+
+
+    <p-button type="submit" label="Submit" styleClass="test"/>
+</form>

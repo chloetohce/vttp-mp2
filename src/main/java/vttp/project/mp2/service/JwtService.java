@@ -1,5 +1,6 @@
 package vttp.project.mp2.service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,8 @@ public class JwtService {
     @Value("${jwt.expiration-time}")
     private long jwtExpirationMs;
 
+    private static final long REFRESH_EXPIRY = Instant.now().toEpochMilli();
+
     private SecretKey key;
 
     @PostConstruct
@@ -48,6 +51,10 @@ public class JwtService {
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return buildToken(extraClaims, userDetails, jwtExpirationMs);
+    }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return buildToken(new HashMap<>(), userDetails, REFRESH_EXPIRY);
     }
 
     public long getExpirationTime() {

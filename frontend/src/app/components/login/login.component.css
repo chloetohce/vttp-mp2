@@ -1,0 +1,7 @@
+/* ::ng-deep.p-button {
+    width: 100vw;
+} */
+
+::ng-deep.test {
+    width: 100svi;
+}

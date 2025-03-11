@@ -25,3 +25,10 @@
 
 1. [Implement JWT authentication in Spring Boot](https://medium.com/@tericcabrel/implement-jwt-authentication-in-a-spring-boot-3-application-5839e4fd8fac)
 2. [JWT Authentication in Spring Boot](https://medium.com/@victoronu/implementing-jwt-authentication-in-a-simple-spring-boot-application-with-java-b3135dbdb17b)
+</details>
+
+<details>
+<summary>Styling with PrimeNG</summary>
+
+1. [Documentation](https://primeng.org/theming)
+</details>

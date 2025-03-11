@@ -20,8 +20,7 @@ public class User implements UserDetails{
 
     private String password;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private String refreshToken;
 
     public static RowMapper<User> rowMapper() {
         return new RowMapper<User>() {
@@ -29,10 +28,10 @@ public class User implements UserDetails{
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
                 User user = new User();
-                user.setUid(rs.getInt("uid"));
                 user.setEmail(rs.getString("email"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));;
+                user.setRefreshToken(rs.getString("refreshToken"));
                 return user;
             }
             
@@ -59,6 +58,9 @@ public class User implements UserDetails{
 
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
+
+    public String getRefreshToken() {return refreshToken;}
+    public void setRefreshToken(String refreshToken) {this.refreshToken = refreshToken;}
 
 
 }

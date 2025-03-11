@@ -12,8 +12,6 @@ import vttp.project.mp2.service.JwtService;
 import vttp.project.mp2.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,6 +28,8 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody User newUser) {
         User registeredUser = userService.signup(newUser);
+
+        // TODO: Why am I returning the user data here??
         return ResponseEntity.ok(registeredUser);
     }
 
@@ -37,17 +37,23 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody User user) {
         User authenticatedUser = authenticationService.authenticate(user);
         String jwtToken = jwtService.generateToken(authenticatedUser);
+        String refreshToken = jwtService.generateRefreshToken(user);
         LoginResponse response = new LoginResponse();
         response.setToken(jwtToken);
         response.setExpiresIn(jwtService.getExpirationTime());
+        response.setRefreshToken(refreshToken);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/path")
-    public String getMethodName() {
-        return "test";
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refreshToken(@RequestBody String refreshToken) {
+        User authenticateRefreshToken = authenticationService.authenticateRefreshToken(refreshToken);
+        String newJwtToken = jwtService.generateToken(authenticateRefreshToken);
+        LoginResponse response = new LoginResponse();
+        response.setToken(newJwtToken);
+        response.setExpiresIn(jwtService.getExpirationTime());
+        return ResponseEntity.ok(response);
     }
-    
     
     
 }

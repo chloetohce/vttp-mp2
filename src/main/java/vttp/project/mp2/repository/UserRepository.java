@@ -1,9 +1,14 @@
 package vttp.project.mp2.repository;
 
+import java.lang.classfile.ClassFile.Option;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,7 +37,14 @@ public class UserRepository {
         );
     }
 
-    public int register(User user) {
+    public Optional<User> findByToken(String token) {
+        return Optional.ofNullable(
+            jdbcTemplate.queryForObject(UserQuery.FIND_REFRESH_TOKEN, User.rowMapper(), new Object[]{token})
+        );
+    }
+
+    public String register(User user) {
+        // TODO: Fix old code with int as id
         KeyHolder key = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -49,6 +61,10 @@ public class UserRepository {
         }, key);
 
         // Return a user here or the generated key?
-        return key.getKey().intValue();
+        return user.getUsername();
+    }
+
+    public boolean updateRefreshToken(String refreshToken, String username) {
+        return jdbcTemplate.update(UserQuery.UPDATE_REFRESH_TOKEN, refreshToken, username) > 0;
     }
 }

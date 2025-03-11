@@ -4,6 +4,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import vttp.project.mp2.exception.InvalidRefreshTokenException;
 import vttp.project.mp2.model.User;
 import vttp.project.mp2.repository.UserRepository;
 
@@ -11,10 +12,14 @@ import vttp.project.mp2.repository.UserRepository;
 public class AuthenticationService {
     private final AuthenticationManager manager;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    public AuthenticationService(AuthenticationManager manager, UserRepository userRepository) {
+    public AuthenticationService(AuthenticationManager manager, 
+        UserRepository userRepository,
+        JwtService jwtService) {
         this.userRepository = userRepository;
         this.manager = manager;
+        this.jwtService = jwtService;
     }
 
     public void authenticate(String username, String password) {
@@ -29,5 +34,17 @@ public class AuthenticationService {
 
         return userRepository.findByUsername(input.getUsername())
             .orElseThrow();
+    }
+
+    /**
+     * Checks if refresh token provided is in database and has not yet expired. 
+     * @param refreshToken
+     * @return user details
+     * @throws InvalidRefreshTokenException if token stored is invalid, expired, or not found
+     */
+    public User authenticateRefreshToken(String refreshToken) {
+        return userRepository.findByToken(refreshToken)
+            .filter(u -> jwtService.isTokenValid(refreshToken, u))
+            .orElseThrow(() -> new InvalidRefreshTokenException("invalid refresh token"));
     }
 }

@@ -15,13 +15,16 @@ public class UserService implements UserDetailsService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public UserService(
         UserRepository userRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        JwtService jwtService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -37,11 +40,16 @@ public class UserService implements UserDetailsService{
 
     public User signup(User input) {
         input.setPassword(passwordEncoder.encode(input.getPassword()));
-        int uid = userRepository.register(input);
-        input.setUid(uid);
+        userRepository.register(input);
+        // input.setUid(uid);
         return input;
     }
 
+    public String createNewRefreshToken(User user) {
+        String newRefreshToken = jwtService.generateToken(user);
+        userRepository.updateRefreshToken(newRefreshToken, user.getUsername());
+        return newRefreshToken;
+    }
 
 
 }
