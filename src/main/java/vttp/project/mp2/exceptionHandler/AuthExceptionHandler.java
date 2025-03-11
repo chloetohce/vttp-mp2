@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,11 +29,12 @@ public class AuthExceptionHandler {
         JwtException.class, 
         SignatureException.class, 
         ExpiredJwtException.class,
-        InvalidRefreshTokenException.class
+        InvalidRefreshTokenException.class,
+        InternalAuthenticationServiceException.class
     })
     public ResponseEntity<String> handleSecurityException(Exception e) {
 
-        if (e instanceof BadCredentialsException || e instanceof UsernameNotFoundException) {
+        if (e instanceof BadCredentialsException || e instanceof UsernameNotFoundException || e instanceof InternalAuthenticationServiceException) {
             LOGGER.info("BadCredentialsException: incorrect username or password");
             return ResponseEntity.status(HttpStatusCode.valueOf(401))
             .body(ErrorMessage.toResponse("The username or password is incorrect. "));

@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService{
     }
 
     public String createNewRefreshToken(User user) {
-        String newRefreshToken = jwtService.generateToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
         userRepository.updateRefreshToken(newRefreshToken, user.getUsername());
         return newRefreshToken;
     }

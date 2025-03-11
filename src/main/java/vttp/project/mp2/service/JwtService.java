@@ -1,9 +1,12 @@
 package vttp.project.mp2.service;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
@@ -27,7 +30,8 @@ public class JwtService {
     @Value("${jwt.expiration-time}")
     private long jwtExpirationMs;
 
-    private static final long REFRESH_EXPIRY = Instant.now().toEpochMilli();
+    private static final long WEEK_MS = 1 * 7 * 24 * 60 * 60 * 1000;
+    private static final long REFRESH_EXPIRY = System.currentTimeMillis() + WEEK_MS; 
 
     private SecretKey key;
 
@@ -50,10 +54,11 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpirationMs);
+        return buildToken(extraClaims, userDetails, System.currentTimeMillis() + jwtExpirationMs);
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
+        System.out.println(REFRESH_EXPIRY);
         return buildToken(new HashMap<>(), userDetails, REFRESH_EXPIRY);
     }
 
@@ -66,7 +71,7 @@ public class JwtService {
             .setClaims(extraClaims)
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .setExpiration(new Date(expiration))
             .signWith(this.key, SignatureAlgorithm.HS256)
             .compact();
     }
@@ -92,4 +97,7 @@ public class JwtService {
             .getBody();
     }
 
+    public static void main(String[] args) {
+        System.out.println(Instant.now().toEpochMilli());
+    }
 }

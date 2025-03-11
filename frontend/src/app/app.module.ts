@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +13,11 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { GameComponent } from './components/game/game.component';
 import { AuthInterceptor } from './services/authentication/AuthInterceptor';
 import { HomeComponent } from './components/home/home.component';
+import { provideStore, StoreModule } from '@ngrx/store';
+import { authReducer } from './store/authentication/auth.store';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './store/authentication/auth.effects';
+import { provideStoreDevtools, StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -25,12 +30,21 @@ import { HomeComponent } from './components/home/home.component';
     BrowserModule,
     AppRoutingModule,
     PrimengModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forRoot({auth: authReducer}),
+    EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    provideStoreDevtools({
+      logOnly: !isDevMode(),
+      trace: true,
+      traceLimit: 50,
+      autoPause: true
+    }),
     providePrimeNG({
       theme: {
         preset: PrimeNGPreset

@@ -1,68 +1,117 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { AuthResponse, User } from '../../model/AuthModels';
+import { BehaviorSubject, first, firstValueFrom, last, lastValueFrom, Observable, Subject, switchMap, take } from 'rxjs';
+import { AuthResponse, User } from '../../model/auth.model';
 import { jwtDecode } from 'jwt-decode';
+import { select, Store } from '@ngrx/store';
+import { AUTH_URL } from '../../constants/url';
+import { AuthState, selectRefreshToken, selectToken } from '../../store/authentication/auth.store';
+import {
+  clearTokens,
+  loadTokens,
+  refreshToken,
+  setLoggedIn,
+  setRefreshToken,
+  setToken,
+} from '../../store/authentication/auth.actions';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private router: Router = inject(Router);
   private http: HttpClient = inject(HttpClient);
+  private authStore: Store<{auth: AuthState}> = inject(Store);
 
   // Change to store in component state
-  private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private loggedInUserSubject: Subject<string> = new Subject<string>()
+  private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
+  private loggedInUserSubject: Subject<string> = new Subject<string>();
   loggedInUsername$ = this.loggedInUserSubject.asObservable();
 
-  constructor() { }
+  constructor() {}
 
-  get isLoggedIn() {return this.loggedIn.value}
+  get isLoggedIn() {
+    return this.loggedIn.value;
+  }
 
   login(login: User) {
-    this.http.post<AuthResponse>('http://localhost:8080/auth/login', login)
+    this.http
+      .post<AuthResponse>('http://localhost:8080/auth/login', login)
       .subscribe({
         next: (response) => {
-          console.log("Login response:", response)
+          console.log('Login response:', response);
           const token = response.token;
-          this.loggedIn.next(true);
-          this.loggedInUserSubject.next(login.username);
-          localStorage.setItem('token', token); 
-          this.router.navigate(["/game"])
+          const refreshToken = response.refreshToken;
+          this.authStore.dispatch(setToken({ token: token }));
+          this.authStore.dispatch(
+            setRefreshToken({ refreshToken: refreshToken })
+          );
+          this.authStore.dispatch(setLoggedIn({ isLoggedIn: true }));
+          this.router.navigate(['/game']);
         },
         error: (err) => {
           console.log(err)
-          this.loggedIn.next(false);
-          localStorage.removeItem('token');
-          this.router.navigate(['/login'])
-        } 
-    })
+          this.authStore.dispatch(setLoggedIn({ isLoggedIn: false }));
+          this.authStore.dispatch(clearTokens());
+          this.router.navigate(['/login']);
+        },
+        complete: () => {},
+      });
   }
 
   logout() {
-    this.loggedIn.next(false);
-    localStorage.removeItem('token');
-    this.router.navigate(['/'])
+    this.authStore.dispatch(clearTokens())
+    this.router.navigate(['/']);
   }
 
-  isTokenExpired(): boolean {
-    const expiry: number = this.expiry
-    return expiry > Date.now();
+  /**
+   * Refreshes authentication tokens as needed. Reroutes user if refresh
+   * token is invalid
+   */
+  async isAuthenticated(): Promise<boolean> {
+    console.info("Authenticating user.")
+    this.authStore.dispatch(loadTokens());
+    if (!await this.isTokenValid("refreshToken")) {
+      console.log(await this.isTokenValid("refreshToken"))
+      this.authStore.dispatch(setLoggedIn({isLoggedIn: false}))
+      return false
+    }
+
+    if (!await this.isTokenValid("token")) {
+      this.authStore.dispatch(refreshToken())
+    }
+    return true;
   }
 
-  private get jwtToken() : string | null {
-    return localStorage.getItem("token")
+  private async isTokenValid(type: string): Promise<boolean> {
+    let tempToken: string | null = null;
+    if (type == "token") {
+      tempToken = await firstValueFrom(
+        this.authStore.select(selectToken).pipe(take(1)))
+
+    } else {
+      tempToken = await firstValueFrom(
+        this.authStore.select(selectRefreshToken).pipe(take(1)))
+    }
+
+    if (!tempToken) return false;
+    console.log(tempToken)
+    console.log((jwtDecode(tempToken).exp ?? 0) * 1000)
+
+    return (jwtDecode(tempToken).exp ?? 0) * 1000 > Date.now()
   }
 
-  get username(): string {
-    let token: string = this.jwtToken || ""
-    return jwtDecode(token).sub || ""
+  refreshToken(): Observable<{token: string}> {
+    return this.authStore.select(selectRefreshToken)
+      .pipe(
+        first(),
+        switchMap((refreshToken) => {
+          return this.http.post<{token:string}>(`${AUTH_URL}/refresh`, {refreshToken: refreshToken})
+        })
+      )
   }
-  
-  get expiry(): number {
-    let token: string = this.jwtToken || ""
-    return jwtDecode(token).exp || 0
-  }
+
 }

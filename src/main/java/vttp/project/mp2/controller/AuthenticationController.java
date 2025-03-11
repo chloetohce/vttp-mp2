@@ -37,7 +37,9 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody User user) {
         User authenticatedUser = authenticationService.authenticate(user);
         String jwtToken = jwtService.generateToken(authenticatedUser);
-        String refreshToken = jwtService.generateRefreshToken(user);
+        String refreshToken = userService.createNewRefreshToken(authenticatedUser);
+        System.out.println(jwtToken);
+        System.out.println(refreshToken);
         LoginResponse response = new LoginResponse();
         response.setToken(jwtToken);
         response.setExpiresIn(jwtService.getExpirationTime());
@@ -48,7 +50,7 @@ public class AuthenticationController {
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refreshToken(@RequestBody String refreshToken) {
         User authenticateRefreshToken = authenticationService.authenticateRefreshToken(refreshToken);
-        String newJwtToken = jwtService.generateToken(authenticateRefreshToken);
+        String newJwtToken = userService.createNewRefreshToken(authenticateRefreshToken);
         LoginResponse response = new LoginResponse();
         response.setToken(newJwtToken);
         response.setExpiresIn(jwtService.getExpirationTime());

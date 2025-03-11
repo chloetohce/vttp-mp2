@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { User } from '../../model/AuthModels';
+import { User } from '../../model/auth.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/authentication/auth.service';
 

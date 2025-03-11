@@ -7,7 +7,7 @@ create table users (
     username varchar(255) not null,
     email varchar(255) not null,
     password varchar(255) not null,
-    refreshToken char(36),
+    refreshToken varchar(600),
 
     constraint pk_username primary key(username)
 );
