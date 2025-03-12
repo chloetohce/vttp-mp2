@@ -1,5 +1,10 @@
 package vttp.project.mp2.controller;
 
+import java.io.StringReader;
+
+import jakarta.json.Json;
+import jakarta.json.JsonReader;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +43,6 @@ public class AuthenticationController {
         User authenticatedUser = authenticationService.authenticate(user);
         String jwtToken = jwtService.generateToken(authenticatedUser);
         String refreshToken = userService.createNewRefreshToken(authenticatedUser);
-        System.out.println(jwtToken);
-        System.out.println(refreshToken);
         LoginResponse response = new LoginResponse();
         response.setToken(jwtToken);
         response.setExpiresIn(jwtService.getExpirationTime());
@@ -48,7 +51,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refreshToken(@RequestBody String refreshToken) {
+    public ResponseEntity<LoginResponse> refreshToken(@RequestBody String request) {
+        JsonReader reader = Json.createReader(new StringReader(request));
+        String refreshToken = reader.readObject().getString("refreshToken");
+
         User authenticateRefreshToken = authenticationService.authenticateRefreshToken(refreshToken);
         String newJwtToken = userService.createNewRefreshToken(authenticateRefreshToken);
         LoginResponse response = new LoginResponse();

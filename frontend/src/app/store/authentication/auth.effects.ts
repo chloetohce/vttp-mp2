@@ -36,7 +36,6 @@ export class AuthEffects {
     )
 
     // Listen for refreshToken
-    // when the refreshToken action is dispatched, authService hadnles the request of a new jwt token from server
     refreshToken$ = createEffect(() =>
         this.actions$.pipe(
             ofType(refreshToken),
@@ -44,8 +43,11 @@ export class AuthEffects {
                 this.authService.refreshToken()
                     .pipe(
                         map((response) => setToken({token: response.token})),
-                        catchError(() => of(clearTokens()))
+                        catchError(() => {
+                            return of(clearTokens())
+                        })
                     )
+        
             )
         )
     )

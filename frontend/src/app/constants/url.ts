@@ -1,1 +1,1 @@
-export const AUTH_URL = "https://localhost:8080/auth/"
+export const AUTH_URL = "http://localhost:8080/auth/"

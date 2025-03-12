@@ -5,10 +5,12 @@ import { LoginComponent } from './components/login/login.component';
 import { GameComponent } from './components/game/game.component';
 import { checkIfAuthenticated } from './services/authentication/auth.guard';
 import { HomeComponent } from './components/home/home.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'signup', component: SignupComponent},
   {path: 'game', component: GameComponent, canActivate: [checkIfAuthenticated]},
   {path: '**', redirectTo: '', pathMatch: 'full'}
 ];

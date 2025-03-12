@@ -18,13 +18,15 @@ import { authReducer } from './store/authentication/auth.store';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/authentication/auth.effects';
 import { provideStoreDevtools, StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     GameComponent,
-    HomeComponent
+    HomeComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

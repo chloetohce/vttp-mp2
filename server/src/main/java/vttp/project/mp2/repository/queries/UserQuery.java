@@ -17,7 +17,7 @@ public class UserQuery {
             """;
 
     public static final String FIND_REFRESH_TOKEN = """
-            select username, email, password
+            select *
             from users
             where refreshToken = ?
             """;

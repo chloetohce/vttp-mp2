@@ -31,15 +31,22 @@ export class AuthService {
   private loggedInUserSubject: Subject<string> = new Subject<string>();
   loggedInUsername$ = this.loggedInUserSubject.asObservable();
 
+  private authErrorMsg = new Subject<string | null>();
+  authErrorMsg$ = this.authErrorMsg.asObservable();
+
   constructor() {}
 
-  get isLoggedIn() {
-    return this.loggedIn.value;
+  signup(newUser: User) {
+    this.http.post(`${AUTH_URL}sigwnup`, newUser)
+      .subscribe({
+        next: (response) => {this.router.navigate(['/login'])},
+        error: (err) => {alert("Something went wrong. Please try again.")}
+      })
   }
 
   login(login: User) {
     this.http
-      .post<AuthResponse>('http://localhost:8080/auth/login', login)
+      .post<AuthResponse>(`${AUTH_URL}login`, login)
       .subscribe({
         next: (response) => {
           console.log('Login response:', response);
@@ -50,12 +57,25 @@ export class AuthService {
             setRefreshToken({ refreshToken: refreshToken })
           );
           this.authStore.dispatch(setLoggedIn({ isLoggedIn: true }));
+
+          this.authErrorMsg.next(null)
           this.router.navigate(['/game']);
         },
         error: (err) => {
-          console.log(err)
           this.authStore.dispatch(setLoggedIn({ isLoggedIn: false }));
           this.authStore.dispatch(clearTokens());
+          console.log(err)
+
+          // Different error messages returned based on status code
+          let msg: string;
+          if (err.status == 401) {
+            msg = "Your username and/or password is incorrect."
+          } else {
+            msg = "Something went wrong. Please try again. "
+          }
+
+          this.authErrorMsg.next(msg);
+          
           this.router.navigate(['/login']);
         },
         complete: () => {},
@@ -72,10 +92,8 @@ export class AuthService {
    * token is invalid
    */
   async isAuthenticated(): Promise<boolean> {
-    console.info("Authenticating user.")
     this.authStore.dispatch(loadTokens());
     if (!await this.isTokenValid("refreshToken")) {
-      console.log(await this.isTokenValid("refreshToken"))
       this.authStore.dispatch(setLoggedIn({isLoggedIn: false}))
       return false
     }
@@ -98,8 +116,6 @@ export class AuthService {
     }
 
     if (!tempToken) return false;
-    console.log(tempToken)
-    console.log((jwtDecode(tempToken).exp ?? 0) * 1000)
 
     return (jwtDecode(tempToken).exp ?? 0) * 1000 > Date.now()
   }
@@ -109,7 +125,7 @@ export class AuthService {
       .pipe(
         first(),
         switchMap((refreshToken) => {
-          return this.http.post<{token:string}>(`${AUTH_URL}/refresh`, {refreshToken: refreshToken})
+          return this.http.post<{token:string}>(`${AUTH_URL}refresh`, {refreshToken: refreshToken})
         })
       )
   }

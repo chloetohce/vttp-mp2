@@ -1,3 +1,7 @@
+<div *ngIf="errorMsg$ | async as errorMsg">
+    <p>{{errorMsg}}</p>
+</div>
+
 <form [formGroup]="form" (ngSubmit)="processLogin($event)" >
     <p-floatlabel variant="on">
         <input pInputText id="username" formControlName="username" pSize="small" variant="filled">
