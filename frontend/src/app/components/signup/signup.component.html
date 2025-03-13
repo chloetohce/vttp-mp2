@@ -1,3 +1,36 @@
-<form action="" (submit)="processSignup($event)">
-    <button type="submit">Submit</button> <!-- Implement loading here in case server is slow?-->
+<form [formGroup]="form" (submit)="processSignup($event)">
+    <p-floatlabel variant="on">
+        <input pInputText id="username" formControlName="username" pSize="small" 
+            variant="filled" (change)="resetFieldDbErrorMessage('username')">
+        <label for="username">Username</label>
+    </p-floatlabel>
+    <p-message severity="error" variant="simple" size="small">{{errUsername}}</p-message>
+    <p-message severity="error" variant="simple" size="small" 
+        [hidden]="isFieldValid('username')">Username is required and must be at least 4 characters.
+    </p-message>
+
+
+    <p-floatlabel variant="on">
+        <input pInputText id="email" formControlName="email" pSize="small" 
+            variant="filled" (change)="resetFieldDbErrorMessage('email')">
+        <label for="email">Email</label>
+    </p-floatlabel>
+    <p-message severity="error" variant="simple" size="small">{{errEmail}}</p-message>
+    <p-message severity="error" variant="simple" size="small" 
+        [hidden]="isFieldValid('email')">Provide a valid email.
+    </p-message>
+    
+    
+    <p-floatlabel variant="on">
+        <p-password formControlName="password" [toggleMask]="true" size="small" variant="filled" [feedback]="false"></p-password>
+        <label for="pasword">Password</label>
+    </p-floatlabel>
+    <p-message severity="error" variant="simple" size="small" 
+        [hidden]="isFieldValid('password')">Password needs to be at least 6 characters.
+    </p-message>
+
+
+    <p-button type="submit" label="Submit" [disabled]="form.invalid"/>
+    
+    <!-- Implement loading here in case server is slow?-->
 </form>

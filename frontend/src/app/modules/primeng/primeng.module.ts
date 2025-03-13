@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
+import { MessageModule } from 'primeng/message';
 
 const MODULES = [
   CommonModule, 
@@ -11,6 +12,7 @@ const MODULES = [
   InputTextModule,
   FloatLabelModule,
   PasswordModule,
+  MessageModule
 ]
 
 @NgModule({

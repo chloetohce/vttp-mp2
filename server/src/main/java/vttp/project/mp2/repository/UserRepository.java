@@ -3,17 +3,14 @@ package vttp.project.mp2.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import vttp.project.mp2.model.User;
@@ -25,15 +22,19 @@ public class UserRepository {
     private JdbcTemplate jdbcTemplate;
     
     public Optional<User> findByEmail(String email) {
-        return Optional.ofNullable(
-            jdbcTemplate.queryForObject(UserQuery.FIND_EMAIL, User.rowMapper(), new Object[]{email})
-        );
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(UserQuery.FIND_EMAIL, email);
+        if (rs.next()) {
+            return Optional.of(User.toUser(rs));
+        }
+        return Optional.empty();
     }
 
     public Optional<User> findByUsername(String username) {
-        return Optional.ofNullable(
-            jdbcTemplate.queryForObject(UserQuery.FIND_USERNAME, User.rowMapper(), new Object[]{username})
-        );
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(UserQuery.FIND_USERNAME, username);
+        if (rs.next()) {
+            return Optional.of(User.toUser(rs));
+        }
+        return Optional.empty();
     }
 
     public Optional<User> findByToken(String token) {

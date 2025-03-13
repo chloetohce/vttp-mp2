@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, first, firstValueFrom, last, lastValueFrom, Observable, Subject, switchMap, take } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, first, firstValueFrom, last, lastValueFrom, map, Observable, of, Subject, switchMap, take, throwError } from 'rxjs';
 import { AuthResponse, User } from '../../model/auth.model';
 import { jwtDecode } from 'jwt-decode';
 import { select, Store } from '@ngrx/store';
@@ -36,12 +36,17 @@ export class AuthService {
 
   constructor() {}
 
-  signup(newUser: User) {
-    this.http.post(`${AUTH_URL}sigwnup`, newUser)
-      .subscribe({
-        next: (response) => {this.router.navigate(['/login'])},
-        error: (err) => {alert("Something went wrong. Please try again.")}
-      })
+  signup(newUser: User): Observable<string> {
+    return this.http.post(`${AUTH_URL}signup`, newUser)
+      .pipe(
+        map(() => {
+          this.router.navigate(['/login'])
+          return 'success'
+        }),
+        catchError((err) => {
+          return throwError(() => err.error)
+        })
+      )
   }
 
   login(login: User) {

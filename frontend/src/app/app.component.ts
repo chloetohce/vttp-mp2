@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { loadTokens } from './store/authentication/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +8,12 @@ import { Component } from '@angular/core';
   standalone: false,
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'frontend';
+
+  authStore = inject(Store)
+
+  ngOnInit(): void {
+      this.authStore.dispatch(loadTokens())
+  }
 }

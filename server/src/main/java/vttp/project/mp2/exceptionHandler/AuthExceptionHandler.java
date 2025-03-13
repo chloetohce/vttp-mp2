@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -62,4 +61,5 @@ public class AuthExceptionHandler {
                 .body(ErrorMessage.toResponse("An unknown error has occurred."));
         }
     }
+
 }

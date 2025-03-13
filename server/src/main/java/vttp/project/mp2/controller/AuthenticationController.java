@@ -2,21 +2,21 @@ package vttp.project.mp2.controller;
 
 import java.io.StringReader;
 
-import jakarta.json.Json;
-import jakarta.json.JsonReader;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import vttp.project.mp2.model.LoginResponse;
 import vttp.project.mp2.model.User;
 import vttp.project.mp2.service.AuthenticationService;
 import vttp.project.mp2.service.JwtService;
 import vttp.project.mp2.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,11 +31,14 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody User newUser) {
-        User registeredUser = userService.signup(newUser);
+    public ResponseEntity<String> signup(@RequestBody User newUser) {
+        JsonObject message = userService.signup(newUser);
 
-        // TODO: Why am I returning the user data here??
-        return ResponseEntity.ok(registeredUser);
+        if (message.isEmpty()) {
+            return ResponseEntity.ok("");
+        }
+
+        return ResponseEntity.badRequest().body(message.toString());
     }
 
     @PostMapping("/login")

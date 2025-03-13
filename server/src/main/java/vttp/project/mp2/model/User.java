@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,12 +31,21 @@ public class User implements UserDetails{
                 User user = new User();
                 user.setEmail(rs.getString("email"));
                 user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));;
+                user.setPassword(rs.getString("password"));
                 user.setRefreshToken(rs.getString("refreshToken"));
                 return user;
             }
             
         };
+    }
+
+    public static User toUser(SqlRowSet rs) {
+        User user = new User();
+        user.setEmail(rs.getString("email"));
+        user.setUsername(rs.getString("username"));
+        user.setPassword(rs.getString("password"));
+        user.setRefreshToken(rs.getString("refreshToken"));
+        return user;
     }
 
     /**
