@@ -12,5 +12,13 @@ create table users (
     constraint pk_username primary key(username)
 );
 
+create table playerData (
+    username varchar(255) not null,
+    stage int default 0,
+
+    constraint pk_username primary key(username),
+    constraint fk_username foreign key(username) references users(username)
+)
+
 grant all privileges on mp2.* to 'chloe'@'%';
 flush privileges;

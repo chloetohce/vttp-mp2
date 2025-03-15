@@ -17,23 +17,41 @@ export const PrimeNGPreset = definePreset(Aura, {
             900: '{lime.900}',
             950: '{lime.950}'
         },
-        surface: {
-            0: '#ffffff',
-            50: '{slate.50}',
-            100: '{slate.100}',
-            200: '{slate.200}',
-            300: '{slate.300}',
-            400: '{slate.400}',
-            500: '{slate.500}',
-            600: '{slate.600}',
-            700: '{slate.700}',
-            800: '{slate.800}',
-            900: '{slate.900}',
-            950: '{slate.950}'
+        dark: {
+            surface: {
+                0: '#ffffff',
+                50: '{slate.50}',
+                100: '{slate.100}',
+                200: '{slate.200}',
+                300: '{slate.300}',
+                400: '{slate.400}',
+                500: '{slate.500}',
+                600: '{slate.600}',
+                700: '{slate.700}',
+                800: '{slate.800}',
+                900: '{slate.900}',
+                950: '{slate.950}'
+            },
         },
-        pageBackground: '{surface.900}',
+        light: {
+            surface: {
+                0: '#ffffff',
+                50:  '{slate.50}',
+                100: '{slate.100}',
+                200: '{slate.200}',
+                300: '{slate.300}',
+                400: '{slate.400}',
+                500: '{slate.500}',
+                600: '{slate.600}',
+                700: '{slate.700}',
+                800: '{slate.800}',
+                900: '{slate.900}',
+                950: '{slate.950}'
+            },
+        },
         colorScheme: {
             dark: {
+                pageBackground: '{surface.900}',
                 surface: {
                     background: '{surface.900}'
                 },
@@ -53,11 +71,32 @@ export const PrimeNGPreset = definePreset(Aura, {
                     hoverBorderColor: '{secondary.300}',
                     background: '{surface.900}'
                 },
-                // focusRing: {
-                //     width: '2px',
-                //     color: '{secondary.300}',
-                //     offset: '1px'
-                // }
+                focusRing: {
+                    width: '2px',
+                    color: '{secondary.300}',
+                    offset: '1px'
+                }
+            },
+            light: {
+                pageBackground: '{surface.50}',
+                surface:{
+                    background: '{surface.50}'
+                },
+                primary: {
+                    color: '{secondary.400}',
+                    inverseColor: '{secondary.400}',
+                    hoverColor: '{secondary.300}',
+                    activeColor: '{secondary.200}'
+                },
+                formField: {
+                    hoverBorderColor: '{secondary.300}',
+                    background: '{surface.50}'
+                },
+                focusRing: {
+                    width: '2px',
+                    color: '{secondary.300}',
+                    offset: '1px'
+                },
             }
         }
     }

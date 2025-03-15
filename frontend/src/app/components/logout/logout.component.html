@@ -1,0 +1,13 @@
+
+
+@if (type === 'icon') {
+    <div class="logout-icon" #logoutIcon>
+        <p-button icon="pi pi-sign-out" aria-label="logout" (click)="logout()" />
+    </div>
+    
+} @else {
+    <div class="logout-button" #logoutButton>
+        <p-button label="Logout" icon="pi pi-sign-out" (click)="logout()" aria-label="logout" />
+    </div>
+
+}

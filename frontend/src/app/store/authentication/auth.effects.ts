@@ -9,8 +9,6 @@ import { Store } from "@ngrx/store";
 export class AuthEffects {
     private actions$: Actions = inject(Actions);
 
-    private store = inject(Store)
-
     private authService: AuthService = inject(AuthService)
 
     // For setTokens

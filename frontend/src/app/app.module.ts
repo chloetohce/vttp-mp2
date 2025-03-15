@@ -19,6 +19,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './store/authentication/auth.effects';
 import { provideStoreDevtools, StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SignupComponent } from './components/signup/signup.component';
+import { LogoutComponent } from './components/logout/logout.component';
+import { AppState } from './store/app.store';
+import { playerReducer } from './store/player/player.store';
+import { PlayerEffects } from './store/player/player.effects';
 
 @NgModule({
   declarations: [
@@ -26,15 +30,16 @@ import { SignupComponent } from './components/signup/signup.component';
     LoginComponent,
     GameComponent,
     HomeComponent,
-    SignupComponent
+    SignupComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     PrimengModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({auth: authReducer}),
-    EffectsModule.forRoot([AuthEffects]),
+    StoreModule.forRoot<AppState>({auth: authReducer, player: playerReducer}),
+    EffectsModule.forRoot([AuthEffects, PlayerEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [

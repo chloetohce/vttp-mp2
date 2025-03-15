@@ -22,8 +22,8 @@
     
     
     <p-floatlabel variant="on">
-        <p-password formControlName="password" [toggleMask]="true" size="small" variant="filled" [feedback]="false"></p-password>
-        <label for="pasword">Password</label>
+        <p-password id="password" formControlName="password" [toggleMask]="true" size="small" variant="filled" [feedback]="false"></p-password>
+        <label for="password">Password</label>
     </p-floatlabel>
     <p-message severity="error" variant="simple" size="small" 
         [hidden]="isFieldValid('password')">Password needs to be at least 6 characters.
