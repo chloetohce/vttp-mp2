@@ -1,0 +1,63 @@
+{
+    "start": {
+      "id": "start",
+      "type": "dialogue",
+      "text": "Hello traveler! What brings you to this part\n of the world? ${demoString}",
+      "speaker": "Villager",
+      "next": "options"
+    },
+    "options": {
+      "id": "options",
+      "type": "dialogue",
+      "text": "I'm interested to know more about you.",
+      "speaker": "Player",
+      "choices": [
+        {
+          "text": "Ask about the village",
+          "next": "village_info"
+        },
+        {
+          "text": "Ask about monsters nearby",
+          "next": "monster_info"
+        },
+        {
+          "text": "Say goodbye",
+          "next": "end"
+        }
+      ]
+    },
+    "village_info": {
+      "id": "village_info",
+      "type": "dialogue",
+      "text": "Our village has stood here for generations. We're known for our skilled craftsmen and bountiful harvests.",
+      "speaker": "Villager",
+      "next": "village_info2"
+    },
+    "village_info2": {
+      "id": "village_info2",
+      "type": "dialogue",
+      "text": "Though lately, we've had some trouble with monsters from the nearby forest...",
+      "speaker": "Villager",
+      "next": "options"
+    },
+    "monster_info": {
+      "id": "monster_info",
+      "type": "dialogue",
+      "text": "There have been sightings of strange creatures in the forest to the east. No one has been hurt yet, but we're all on edge.",
+      "speaker": "Villager",
+      "next": "monster_info2"
+    },
+    "monster_info2": {
+      "id": "monster_info2",
+      "type": "dialogue",
+      "text": "If you're brave enough to investigate, the village elder might reward you handsomely.",
+      "speaker": "Villager",
+      "next": "options"
+    },
+    "end": {
+      "id": "end",
+      "type": "dialogue",
+      "text": "Safe travels, friend. Feel free to return if you need anything else.",
+      "speaker": "Villager"
+    }
+  }

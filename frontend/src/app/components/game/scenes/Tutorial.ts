@@ -39,7 +39,7 @@ export class Tutorial extends Phaser.Scene {
             border.setSize(w, h);
         });
 
-        this.scene.launch('dialogue')
+        this.scene.launch('dialogue', 'demo' as Object)
 
     }
 }

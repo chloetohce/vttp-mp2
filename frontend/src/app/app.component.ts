@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   title = 'frontend';
 
   authStore = inject(Store)
+  
 
   ngOnInit(): void {
       this.authStore.dispatch(loadTokens())

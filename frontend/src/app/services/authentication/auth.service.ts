@@ -4,9 +4,8 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, EMPTY, first, firstValueFrom, last, lastValueFrom, map, Observable, of, Subject, switchMap, take, throwError } from 'rxjs';
 import { AuthResponse, User } from '../../model/auth.model';
 import { jwtDecode } from 'jwt-decode';
-import { select, Store } from '@ngrx/store';
-import { AUTH_URL } from '../../constants/url';
-import { AuthState, selectRefreshToken, selectToken } from '../../store/authentication/auth.store';
+import { Store } from '@ngrx/store';
+import { selectRefreshToken, selectToken } from '../../store/authentication/auth.store';
 import {
   clearTokens,
   loadTokens,

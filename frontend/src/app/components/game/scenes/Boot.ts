@@ -1,8 +1,6 @@
-import { inject, Injectable, Injector, runInInjectionContext } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { selectPlayerState, selectStage } from "../../../store/player/player.store";
+import { selectStage } from "../../../store/player/player.store";
 import { firstValueFrom, map, take } from "rxjs";
-import { GameStateService } from "../../../services/game-state.service";
 import { AppState } from "../../../store/app.store";
 
 export class Boot extends Phaser.Scene {
@@ -23,7 +21,7 @@ export class Boot extends Phaser.Scene {
         this.load.plugin('rexanchorplugin', 
             'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js', 
             true);
-        }
+    }
         
     async create() {
         let stage = await firstValueFrom(this.store.select(selectStage)

@@ -1,8 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { getPlayerData, getPlayerDataFailure, setPlayerData } from "./player.action";
-import { HttpClient } from "@angular/common/http";
-import { PLAYER_URL } from "../../constants/url";
 import { catchError, map, mergeMap, of, switchMap, tap } from "rxjs";
 import { PlayerService } from "../../services/player.service";
 
