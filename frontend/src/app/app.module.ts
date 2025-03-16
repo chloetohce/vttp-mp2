@@ -31,7 +31,7 @@ import { PlayerEffects } from './store/player/player.effects';
     GameComponent,
     HomeComponent,
     SignupComponent,
-    LogoutComponent
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

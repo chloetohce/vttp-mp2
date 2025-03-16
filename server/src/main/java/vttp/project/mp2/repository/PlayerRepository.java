@@ -13,7 +13,16 @@ public class PlayerRepository {
     private JdbcTemplate jdbcTemplate;
     
     public PlayerData getPlayerData(String username) {
-        return jdbcTemplate.queryForObject(PlayerQuery.PLAYERDATA, 
+        return jdbcTemplate.queryForObject(PlayerQuery.FIND_USERNAME, 
             PlayerData.rowMapper(), username);
+    }
+
+    public int update(PlayerData data) {
+        return jdbcTemplate.update(PlayerQuery.INSERT_ALL, data.getUsername(), 
+            data.getStage());
+    }
+
+    public int createNewPlayer(String username) {
+        return jdbcTemplate.update(PlayerQuery.NEW_PLAYER, username);
     }
 }

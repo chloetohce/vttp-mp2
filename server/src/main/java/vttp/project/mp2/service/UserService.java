@@ -21,15 +21,18 @@ public class UserService implements UserDetailsService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final PlayerDataService playerService;
 
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
-        JwtService jwtService
+        JwtService jwtService,
+        PlayerDataService playerService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.playerService = playerService;
     }
 
     @Override
@@ -65,6 +68,8 @@ public class UserService implements UserDetailsService{
         }
         
         userRepository.register(input); 
+
+        playerService.createNewPlayer(input.getUsername());
 
         return errorMsg.build();
     }

@@ -1,5 +1,16 @@
 # VTTP Mini Project 2
 
+## App Constants
+Lime: #a3e635
+ 
+Slate background: #18181B
+
+Option 1: #4E6851
+Option 2: #F6AE2D
+Option 3: #AAABBC
+
+From inspo: #B83A2D #DCC9A9
+
 ## Todo
 
 ## Weblinks

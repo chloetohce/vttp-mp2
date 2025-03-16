@@ -15,6 +15,8 @@ import {
   setRefreshToken,
   setToken,
 } from '../../store/authentication/auth.actions';
+import { AppState } from '../../store/app.store';
+import { getPlayerData } from '../../store/player/player.action';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +24,7 @@ import {
 export class AuthService {
   private router: Router = inject(Router);
   private http: HttpClient = inject(HttpClient);
-  private authStore: Store<{auth: AuthState}> = inject(Store);
+  private store: Store<AppState> = inject(Store);
 
   // Change to store in component state
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
@@ -37,7 +39,7 @@ export class AuthService {
   constructor() {}
 
   signup(newUser: User): Observable<string> {
-    return this.http.post(`${AUTH_URL}signup`, newUser)
+    return this.http.post('/auth/signup', newUser)
       .pipe(
         map(() => {
           this.router.navigate(['/login'])
@@ -51,24 +53,25 @@ export class AuthService {
 
   login(login: User) {
     this.http
-      .post<AuthResponse>(`${AUTH_URL}login`, login)
+      .post<AuthResponse>('/auth/login', login)
       .subscribe({
         next: (response) => {
           console.log('Login response:', response);
           const token = response.token;
           const refreshToken = response.refreshToken;
-          this.authStore.dispatch(setToken({ token: token }));
-          this.authStore.dispatch(
+          this.store.dispatch(setToken({ token: token }));
+          this.store.dispatch(
             setRefreshToken({ refreshToken: refreshToken })
           );
-          this.authStore.dispatch(setLoggedIn({ isLoggedIn: true }));
+          this.store.dispatch(setLoggedIn({ isLoggedIn: true }));
+          this.store.dispatch(getPlayerData({username: login.username}));
 
           this.authErrorMsg.next(null)
           this.router.navigate(['/game']);
         },
         error: (err) => {
-          this.authStore.dispatch(setLoggedIn({ isLoggedIn: false }));
-          this.authStore.dispatch(clearTokens());
+          this.store.dispatch(setLoggedIn({ isLoggedIn: false }));
+          this.store.dispatch(clearTokens());
           console.log(err)
 
           // Different error messages returned based on status code
@@ -88,7 +91,7 @@ export class AuthService {
   }
 
   logout() {
-    this.authStore.dispatch(clearTokens())
+    this.store.dispatch(clearTokens())
     this.router.navigate(['/']);
   }
 
@@ -97,14 +100,14 @@ export class AuthService {
    * token is invalid
    */
   async isAuthenticated(): Promise<boolean> {
-    this.authStore.dispatch(loadTokens());
+    this.store.dispatch(loadTokens());
     if (!await this.isTokenValid("refreshToken")) {
-      this.authStore.dispatch(setLoggedIn({isLoggedIn: false}))
+      this.store.dispatch(setLoggedIn({isLoggedIn: false}))
       return false
     }
 
     if (!await this.isTokenValid("token")) {
-      this.authStore.dispatch(refreshToken())
+      this.store.dispatch(refreshToken())
     }
     return true;
   }
@@ -113,11 +116,11 @@ export class AuthService {
     let tempToken: string | null = null;
     if (type == "token") {
       tempToken = await firstValueFrom(
-        this.authStore.select(selectToken).pipe(take(1)))
+        this.store.select(selectToken).pipe(take(1)))
 
     } else {
       tempToken = await firstValueFrom(
-        this.authStore.select(selectRefreshToken).pipe(take(1)))
+        this.store.select(selectRefreshToken).pipe(take(1)))
     }
 
     if (!tempToken) return false;
@@ -126,11 +129,11 @@ export class AuthService {
   }
 
   refreshToken(): Observable<{token: string}> {
-    return this.authStore.select(selectRefreshToken)
+    return this.store.select(selectRefreshToken)
       .pipe(
         first(),
         switchMap((refreshToken) => {
-          return this.http.post<{token:string}>(`${AUTH_URL}refresh`, {refreshToken: refreshToken})
+          return this.http.post<{token:string}>('/auth/refresh', {refreshToken: refreshToken})
         })
       )
   }

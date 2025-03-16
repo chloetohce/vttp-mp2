@@ -1,0 +1,11 @@
+{
+    "1": {
+        "speaker": "",
+        "type": "text",
+        "text": "",
+        "next": "",
+        "choices": [
+            {"text": "", "next": ""}
+        ]
+    }
+}

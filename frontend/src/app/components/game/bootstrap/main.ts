@@ -1,17 +1,25 @@
 import { RouteConfigLoadEnd } from "@angular/router";
 import { AUTO, Game } from "phaser";
+import { Boot } from "../scenes/Boot";
+import { Tutorial } from "../scenes/Tutorial";
+import { Dialogue } from "../scenes/Dialogue";
 
 const config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
     parent: 'game-container',
-    backgroundColor: '#028af8',
+    backgroundColor: '#18181B',
     scale: {
         mode: Phaser.Scale.ENVELOP,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: window.innerWidth,
+        height: window.innerHeight
     },
-    dom: {
-        createContainer: true
-    }
+    pixelArt: true,
+    scene: [
+        Boot, 
+        Tutorial,
+        Dialogue
+    ]
 }
 
 const StartGame = () => {

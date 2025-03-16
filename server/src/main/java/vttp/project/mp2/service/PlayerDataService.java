@@ -14,4 +14,12 @@ public class PlayerDataService {
     public PlayerData getPlayerData(String username) {
         return repository.getPlayerData(username);
     }
+
+    public int updatePlayerData(PlayerData data) {
+        return repository.update(data);
+    }
+
+    public int createNewPlayer(String username) {
+        return repository.createNewPlayer(username);
+    }
 }

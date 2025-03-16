@@ -1,0 +1,4 @@
+canvas {
+    image-rendering: pixelated;  /* Modern browsers */
+    image-rendering: crisp-edges; /* Firefox */
+  }

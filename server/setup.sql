@@ -18,7 +18,7 @@ create table playerData (
 
     constraint pk_username primary key(username),
     constraint fk_username foreign key(username) references users(username)
-)
+);
 
 grant all privileges on mp2.* to 'chloe'@'%';
 flush privileges;

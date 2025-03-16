@@ -10,3 +10,34 @@ body {
     font-family: 'Spock', sans-serif;
     background-color: var(--p-page-background);
 }
+
+/* In your global styles.css */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed; /* This prevents mobile browser address bar issues */
+  }
+  
+  app-root, app-game {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .game-container {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+  }
+  
+  /* This ensures the canvas itself doesn't cause overflow */
+  canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
