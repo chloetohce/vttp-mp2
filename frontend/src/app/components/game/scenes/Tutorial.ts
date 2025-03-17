@@ -1,5 +1,6 @@
 import { inject } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { SCENES } from "../../../constants/scenes.const";
 
 export class Tutorial extends Phaser.Scene {
 
@@ -8,7 +9,7 @@ export class Tutorial extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('border', '/assets/phaser/border.png');
+        this.load.image('border', '/phaser/border.png');
     }
 
     create() {
@@ -39,7 +40,7 @@ export class Tutorial extends Phaser.Scene {
             border.setSize(w, h);
         });
 
-        // let dialogue = this.scene.launch('dialogue', 'demo' as Object)
+        let dialogue = this.scene.launch(SCENES.DIALOGUE, 'demo' as Object)
 
         // border.setInteractive({useHandCursor: true})
         //     .on('pointerup', () => {

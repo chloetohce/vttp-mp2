@@ -34,8 +34,7 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }, 
-              "src/assets"
+              } 
             ],
             "styles": [
               "src/styles.css"
@@ -48,7 +47,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -93,8 +92,7 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              "src/assets"
+              }
             ],
             "styles": [
               "src/styles.css"

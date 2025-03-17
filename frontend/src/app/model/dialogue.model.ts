@@ -1,5 +1,4 @@
 export interface DialogueNode {
-    id: string;
     text: string;
     choices?: DialogueChoice[];
     next?: string;

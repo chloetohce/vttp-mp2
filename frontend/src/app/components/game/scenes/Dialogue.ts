@@ -3,6 +3,7 @@ import { GameObjects } from "phaser";
 import { debounce, Observable, of, Subscription } from "rxjs";
 import { DialogueManager } from "../../../services/game/dialogue.manager";
 import { DialogueChoice, DialogueNode } from "../../../model/dialogue.model";
+import { SCENES } from "../../../constants/scenes.const";
 
 export class Dialogue extends Phaser.Scene {
     // constants
@@ -25,7 +26,7 @@ export class Dialogue extends Phaser.Scene {
     private currentNodeSub!: Subscription;
 
     constructor() {
-        super("dialogue");
+        super(SCENES.DIALOGUE);
     }
 
     init(key: string) {
@@ -36,7 +37,7 @@ export class Dialogue extends Phaser.Scene {
     }
 
     preload() {
-        this.load.setPath('assets/phaser')
+        this.load.setPath('/phaser')
         this.load.image('placeholder-chara', 'placeholder-chara.png')
         this.load.json(`dialogue-${this.dataKey}`, `dialogues/${this.dataKey}.json`)
 
@@ -165,7 +166,6 @@ export class Dialogue extends Phaser.Scene {
             choiceText.setInteractive({useHandCursor: true})
                 .on('pointerup', () => {
                     const playerResponse: DialogueNode = {
-                        id: '',
                         text: choice.text,
                         next: choice.next
                     }

@@ -2,13 +2,14 @@ import { Store } from "@ngrx/store";
 import { selectStage } from "../../../store/player/player.store";
 import { firstValueFrom, map, take } from "rxjs";
 import { AppState } from "../../../store/app.store";
+import { SCENES } from "../../../constants/scenes.const";
 
 export class Boot extends Phaser.Scene {
     private store!: Store<AppState>
 
     constructor() {
         super({
-            key: 'boot'
+            key: SCENES.BOOT
         })
 
     }
@@ -29,9 +30,9 @@ export class Boot extends Phaser.Scene {
             .pipe(take(1)))
         
         if (stage == 0) {
-            this.scene.start('tutorial')
+            this.scene.start(SCENES.TUTORIAL)
         } else {
-            this.scene.start('menu')
+            this.scene.start(SCENES.MENU)
         }
     }
 }

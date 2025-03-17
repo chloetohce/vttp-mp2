@@ -3,7 +3,7 @@
 
 @font-face {
     font-family: 'Spock';
-    src: url('assets/fonts/Fontspring-DEMO-spockess-regular.otf') format("opentype");
+    src: url('/fonts/Fontspring-DEMO-spockess-regular.otf') format("opentype");
 }
 
 body {
