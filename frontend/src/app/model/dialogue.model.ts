@@ -1,8 +1,6 @@
 export interface DialogueNode {
     id: string;
-    type: string;
     text: string;
-    speaker: string;
     choices?: DialogueChoice[];
     next?: string;
     // onEnter?: () => void;

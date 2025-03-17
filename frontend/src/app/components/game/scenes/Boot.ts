@@ -21,6 +21,7 @@ export class Boot extends Phaser.Scene {
         this.load.plugin('rexanchorplugin', 
             'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js', 
             true);
+
     }
         
     async create() {

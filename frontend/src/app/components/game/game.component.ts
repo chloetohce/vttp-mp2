@@ -5,6 +5,7 @@ import { AUTO, Game } from 'phaser';
 import { Boot } from './scenes/Boot';
 import { Tutorial } from './scenes/Tutorial';
 import { Dialogue } from './scenes/Dialogue';
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 @Component({
   selector: 'app-game',
@@ -31,6 +32,15 @@ export class GameComponent implements OnInit, OnDestroy {
     },
     pixelArt: true,
     scene: [Boot, Tutorial, Dialogue],
+    plugins: {
+      scene: [
+        {
+          key: 'rexUI',
+          plugin: UIPlugin,
+          mapping: 'rexUI'
+        }
+      ]
+    }
   };
 
   ngOnInit(): void {

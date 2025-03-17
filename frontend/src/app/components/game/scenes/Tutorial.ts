@@ -39,7 +39,11 @@ export class Tutorial extends Phaser.Scene {
             border.setSize(w, h);
         });
 
-        this.scene.launch('dialogue', 'demo' as Object)
+        // let dialogue = this.scene.launch('dialogue', 'demo' as Object)
 
+        // border.setInteractive({useHandCursor: true})
+        //     .on('pointerup', () => {
+        //         this.scene.setVisible(!this.scene.isVisible('dialogue'), 'dialogue')
+        //     })
     }
 }

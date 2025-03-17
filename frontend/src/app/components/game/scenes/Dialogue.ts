@@ -16,9 +16,11 @@ export class Dialogue extends Phaser.Scene {
 
     // game-related objects
     private container!: GameObjects.Container;
+    private dialogueContainer!: GameObjects.Container;
     private choicesContainer!: GameObjects.Container;
     private portrait!: GameObjects.Sprite;
     private currDialogue!: GameObjects.Text;
+    private choicesList: GameObjects.Text[] = [];
 
     private currentNodeSub!: Subscription;
 
@@ -37,6 +39,7 @@ export class Dialogue extends Phaser.Scene {
         this.load.setPath('assets/phaser')
         this.load.image('placeholder-chara', 'placeholder-chara.png')
         this.load.json(`dialogue-${this.dataKey}`, `dialogues/${this.dataKey}.json`)
+
     }
     
     create() {
@@ -60,6 +63,9 @@ export class Dialogue extends Phaser.Scene {
         background.setInteractive()
         this.container.add(background)
         
+        this.dialogueContainer = this.add.container(0, 0)
+        this.container.add(this.dialogueContainer)
+
         this.choicesContainer = this.add.container(this.width * 0.6, this.height * 0.7)
         
         // TODO: Modify scaling and positioning based on game sprites
@@ -94,6 +100,7 @@ export class Dialogue extends Phaser.Scene {
     }
 
     private advanceDialogue(choiceIndex?: number) {
+        this.choicesList.forEach(c => this.choicesContainer.remove(c, true))
         this.dialogueManager.next(choiceIndex);
     }
 
@@ -102,11 +109,11 @@ export class Dialogue extends Phaser.Scene {
             return;
         }
         
-        this.displayDialogueText(node, 10, 10);
+        this.displayDialogueText(node, 10, 5);
         this.displayChoices(node.choices ?? [])
     }
 
-    private displayDialogueText(node: DialogueNode, x: number, y: number) {
+    private displayDialogueText(node: DialogueNode, x: number, y: number, isPlayer?: boolean) {
         let yOffset;
         if (this.currDialogue)
             yOffset = this.currDialogue.getBottomLeft().y;
@@ -121,14 +128,15 @@ export class Dialogue extends Phaser.Scene {
                 fontSize: '12px',
                 color: '#ffffff',
                 padding: {x: 5, y: 5},
-                resolution: 3,
+                resolution: 0,
+                align: isPlayer ? 'right' : 'left',
                 wordWrap: {width: this.width * 0.4 - 20, useAdvancedWrap: false},
-                backgroundColor: '#232121',
             }
         )
             .setAlpha(0.8)
-
-        this.container.add(this.currDialogue)
+            .setOrigin(isPlayer ? 1 : 0, 0)
+        
+        this.dialogueContainer.add(this.currDialogue)
     }
 
     private displayChoices(choices: DialogueChoice[]) {
@@ -156,6 +164,12 @@ export class Dialogue extends Phaser.Scene {
             // Interaction
             choiceText.setInteractive({useHandCursor: true})
                 .on('pointerup', () => {
+                    const playerResponse: DialogueNode = {
+                        id: '',
+                        text: choice.text,
+                        next: choice.next
+                    }
+                    this.displayDialogueText(playerResponse, this.width * 0.4, 5, true)
                     this.advanceDialogue(i)
                 })
                 .on('pointerover', () => {
@@ -166,6 +180,8 @@ export class Dialogue extends Phaser.Scene {
                 })
             
             this.choicesContainer.add(choiceText)
+            this.choicesList.push(choiceText)
+
             yOffset += choiceText.height + 10;
         })
 
