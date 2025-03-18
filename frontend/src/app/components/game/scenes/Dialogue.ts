@@ -10,6 +10,10 @@ export class Dialogue extends Phaser.Scene {
     width!: number
     height!: number
     dataKey!: string
+    chatX!: number
+    chatY!: number
+    chatWidth!:number
+    choicesY!: number
     demoStr: string = "this is a demo"
 
     // tools
@@ -32,6 +36,10 @@ export class Dialogue extends Phaser.Scene {
     init(key: string) {
         this.width = this.game.renderer.width;
         this.height = this.game.renderer.height;
+        this.chatX = this.width * 0.7
+        this.chatY = 0
+        this.choicesY = this.height * 0.8
+        this.chatWidth = this.width - this.chatX
 
         this.dataKey = key;
     }
@@ -48,7 +56,7 @@ export class Dialogue extends Phaser.Scene {
         this.dialogueManager = new DialogueManager(this.cache.json.get(`dialogue-${this.dataKey}`) as Record<string, DialogueNode>)
         
         // Creating and placing objects
-        this.container = this.add.container(this.width * 0.6, 0)
+        this.container = this.add.container(this.chatX, this.chatY)
         
         const background = new GameObjects.Rectangle(
             this,
@@ -67,7 +75,7 @@ export class Dialogue extends Phaser.Scene {
         this.dialogueContainer = this.add.container(0, 0)
         this.container.add(this.dialogueContainer)
 
-        this.choicesContainer = this.add.container(this.width * 0.6, this.height * 0.7)
+        this.choicesContainer = this.add.container(this.chatX, this.choicesY)
         
         // TODO: Modify scaling and positioning based on game sprites
         this.portrait = this.add.sprite(
@@ -131,7 +139,7 @@ export class Dialogue extends Phaser.Scene {
                 padding: {x: 5, y: 5},
                 resolution: 0,
                 align: isPlayer ? 'right' : 'left',
-                wordWrap: {width: this.width * 0.4 - 20, useAdvancedWrap: false},
+                wordWrap: {width: this.chatWidth - 20, useAdvancedWrap: false},
             }
         )
             .setAlpha(0.8)
@@ -155,7 +163,7 @@ export class Dialogue extends Phaser.Scene {
                 padding: { x: 5, y: 5 },
                 resolution: 3,
                 wordWrap: {
-                  width: this.width * 0.4 - 20,
+                  width: this.chatWidth - 20,
                   useAdvancedWrap: true,
                 },
                 backgroundColor: '#232121',
@@ -169,7 +177,7 @@ export class Dialogue extends Phaser.Scene {
                         text: choice.text,
                         next: choice.next
                     }
-                    this.displayDialogueText(playerResponse, this.width * 0.4, 5, true)
+                    this.displayDialogueText(playerResponse, this.chatWidth, 5, true)
                     this.advanceDialogue(i)
                 })
                 .on('pointerover', () => {
