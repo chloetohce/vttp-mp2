@@ -14,11 +14,21 @@
       "choices": [
         {
           "text": "Ask about the village",
-          "next": "village_info"
+          "next": "village_info",
+          "effect": [
+            {
+              "type": "TEST",
+              "payload": "From JSON file"
+            }
+          ]
         },
         {
           "text": "Ask about monsters nearby",
-          "next": "monster_info"
+          "next": "monster_info",
+          "condition": {
+            "key": "TEST",
+            "payload": false
+          }
         },
         {
           "text": "Say goodbye",

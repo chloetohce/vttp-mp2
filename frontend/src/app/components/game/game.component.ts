@@ -6,6 +6,10 @@ import { Boot } from './scenes/Boot';
 import { Tutorial } from './scenes/Tutorial';
 import { Dialogue } from './scenes/Dialogue';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import { selectAuthState } from '../../store/authentication/auth.store';
+import { getPlayerData } from '../../store/player/player.action';
+import { ActionMapperService } from '../../services/game/action-mapper.service';
+import { Menu } from './scenes/Menu';
 
 @Component({
   selector: 'app-game',
@@ -15,6 +19,7 @@ import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 })
 export class GameComponent implements OnInit, OnDestroy {
   private store: Store = inject(Store);
+  private actionMapper = inject(ActionMapperService)
 
   scene!: Phaser.Scene;
   game!: Phaser.Game;
@@ -31,7 +36,7 @@ export class GameComponent implements OnInit, OnDestroy {
       height: window.innerHeight,
     },
     pixelArt: true,
-    scene: [Boot, Tutorial, Dialogue],
+    scene: [Boot, Tutorial, Dialogue, Menu],
     plugins: {
       scene: [
         {
@@ -47,6 +52,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.game = new Game(this.config);
 
     this.game.registry.set('store', this.store);
+    this.game.registry.set('actionMapper', this.actionMapper)
 
     EventBus.on('current-scene-ready', (scene: Phaser.Scene) => {
       this.scene = scene;
@@ -55,6 +61,7 @@ export class GameComponent implements OnInit, OnDestroy {
         this.sceneCallback(scene);
       }
     });
+
   }
 
   ngOnDestroy(): void {

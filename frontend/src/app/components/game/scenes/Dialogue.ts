@@ -1,9 +1,9 @@
-import { inject } from "@angular/core";
 import { GameObjects } from "phaser";
-import { debounce, Observable, of, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { DialogueManager } from "../../../services/game/dialogue.manager";
-import { DialogueChoice, DialogueNode } from "../../../model/dialogue.model";
+import { DialogueNode } from "../../../model/dialogue.model";
 import { SCENES } from "../../../constants/scenes.const";
+import { ActionMapperService } from "../../../services/game/action-mapper.service";
 
 export class Dialogue extends Phaser.Scene {
     // constants
@@ -53,7 +53,10 @@ export class Dialogue extends Phaser.Scene {
     
     create() {
         // Init dialogue manager
-        this.dialogueManager = new DialogueManager(this.cache.json.get(`dialogue-${this.dataKey}`) as Record<string, DialogueNode>)
+        this.dialogueManager = new DialogueManager(
+            this.cache.json.get(`dialogue-${this.dataKey}`) as Record<string, DialogueNode>,
+            this.registry.get('actionMapper') as ActionMapperService
+        )
         
         // Creating and placing objects
         this.container = this.add.container(this.chatX, this.chatY)
@@ -119,7 +122,7 @@ export class Dialogue extends Phaser.Scene {
         }
         
         this.displayDialogueText(node, 10, 5);
-        this.displayChoices(node.choices ?? [])
+        this.displayChoices()
     }
 
     private displayDialogueText(node: DialogueNode, x: number, y: number, isPlayer?: boolean) {
@@ -148,7 +151,8 @@ export class Dialogue extends Phaser.Scene {
         this.dialogueContainer.add(this.currDialogue)
     }
 
-    private displayChoices(choices: DialogueChoice[]) {
+    private displayChoices() {
+        const choices = this.dialogueManager.getCurrentChoices()
         let yOffset = 10;
         
         choices.forEach((choice, i) => {

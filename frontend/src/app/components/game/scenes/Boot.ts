@@ -28,11 +28,19 @@ export class Boot extends Phaser.Scene {
     async create() {
         let stage = await firstValueFrom(this.store.select(selectStage)
             .pipe(take(1)))
+
+            window.addEventListener('resize', () => {
+                // this.scale.setGameSize(window.innerWidth, window.innerHeight)
+                this.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight)
+                this.scale.refresh()
+            });
         
         if (stage == 0) {
-            this.scene.start(SCENES.TUTORIAL)
+            this.scene.start(SCENES.MENU)
         } else {
             this.scene.start(SCENES.MENU)
         }
+
+        
     }
 }

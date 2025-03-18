@@ -1,15 +1,18 @@
 import { DialogueNode } from "../../model/dialogue.model";
-import { BehaviorSubject, map, tap } from "rxjs";
+import { BehaviorSubject } from "rxjs";
+import { ActionMapperService } from "./action-mapper.service";
 
 export class DialogueManager {
+    private actionMapper;
     private dialogueData: Record<string, DialogueNode>;
     private currentNode: DialogueNode | null = null;
 
     private currentNodeSubject = new BehaviorSubject<DialogueNode | null>(null)
     public currentNode$ = this.currentNodeSubject.asObservable();
 
-    constructor(data: Record<string, DialogueNode>) {
+    constructor(data: Record<string, DialogueNode>, actionMapper: ActionMapperService) {
         this.dialogueData = data;
+        this.actionMapper = actionMapper
     }
     
     // loadDialogue(key: string) {
@@ -37,6 +40,14 @@ export class DialogueManager {
 
         // If choices exist and a choice index is provided
         if (this.currentNode.choices && choiceIndex !== undefined && this.currentNode.choices[choiceIndex]) {
+            const currChoiceNode = this.currentNode.choices[choiceIndex]
+            if (currChoiceNode.effect) {
+                for (const e of currChoiceNode.effect) {
+                    this.actionMapper.dispatchActionString(e.type)
+                }
+
+            }
+            
             nextNodeKey = this.currentNode.choices[choiceIndex].next;
         } else {
             // May be undefined here
@@ -59,7 +70,13 @@ export class DialogueManager {
     }
 
     getCurrentChoices() {
-        return this.currentNode?.choices || []
+        return this.currentNode?.choices?.filter(choice => {
+            if (!choice.condition) 
+                return true;
+            else {
+                return this.actionMapper.evaluateCondition(choice.condition.key)(choice.condition.payload)
+            }
+        }) || []
     }
 
     isChoicesAvailable(): boolean {

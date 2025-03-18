@@ -1,3 +1,5 @@
+import { Action } from "@ngrx/store";
+
 export interface DialogueNode {
     text: string;
     choices?: DialogueChoice[];
@@ -9,5 +11,14 @@ export interface DialogueNode {
 export interface DialogueChoice {
     text: string;
     next: string;
-    // condition?: () => boolean;
+    condition?: {key: string, payload: any};
+    effect?: GameAction[]
 }
+
+export interface GameAction {
+    type: string;
+    payload?: any;
+    action?: ActionCreator;
+}
+
+export type ActionCreator = (payload?: any) => Action
