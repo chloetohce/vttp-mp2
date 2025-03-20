@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { EventBus } from './bootstrap/eventbus';
 import { Store } from '@ngrx/store';
 import { AUTO, Game } from 'phaser';
@@ -6,10 +6,11 @@ import { Boot } from './scenes/Boot';
 import { Tutorial } from './scenes/Tutorial';
 import { Dialogue } from './scenes/Dialogue';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
-import { selectAuthState } from '../../store/authentication/auth.store';
-import { getPlayerData } from '../../store/player/player.action';
 import { ActionMapperService } from '../../services/game/action-mapper.service';
 import { Menu } from './scenes/Menu';
+import { Lesson } from './scenes/Lesson';
+import { Editor } from './scenes/Editor';
+import { EditorComponent } from './editor/editor.component';
 
 @Component({
   selector: 'app-game',
@@ -20,6 +21,8 @@ import { Menu } from './scenes/Menu';
 export class GameComponent implements OnInit, OnDestroy {
   private store: Store = inject(Store);
   private actionMapper = inject(ActionMapperService)
+
+  @ViewChild(EditorComponent) editorComponent!: EditorComponent
 
   scene!: Phaser.Scene;
   game!: Phaser.Game;
@@ -36,7 +39,7 @@ export class GameComponent implements OnInit, OnDestroy {
       height: window.innerHeight,
     },
     pixelArt: true,
-    scene: [Boot, Tutorial, Dialogue, Menu],
+    scene: [Boot, Tutorial, Dialogue, Menu, Lesson, Editor],
     plugins: {
       scene: [
         {
@@ -61,6 +64,11 @@ export class GameComponent implements OnInit, OnDestroy {
         this.sceneCallback(scene);
       }
     });
+
+    window.addEventListener('resize', () => {
+      this.game.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight)
+      this.game.scale.refresh()
+    })
 
   }
 

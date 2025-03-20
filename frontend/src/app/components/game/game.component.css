@@ -1,4 +1,11 @@
-canvas {
-    image-rendering: pixelated;  /* Modern browsers */
-    image-rendering: crisp-edges; /* Firefox */
-  }
+.game-container {
+  width: 100dvw;
+  height: 100dvh;
+}
+
+.editor-container {
+  position: absolute;
+  z-index: 10;
+  height: 80%;
+  width: 70%;
+}

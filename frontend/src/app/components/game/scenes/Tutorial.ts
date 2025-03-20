@@ -17,7 +17,7 @@ export class Tutorial extends Phaser.Scene {
         const height = this.game.renderer.height;
 
         // Getting anchor plugin
-        const anchor = (this.plugins.get('rexanchorplugin') as any)
+        // const anchor = (this.plugins.get('rexanchorplugin') as any)
         
         const border = this.add.nineslice(
             width / 2,
@@ -29,10 +29,10 @@ export class Tutorial extends Phaser.Scene {
             10, 10, 10, 10
         ).setOrigin(0.5, 0.5);
 
-        anchor.add(border, {
-            centerX: 'center',
-            centerY: 'center'
-        })
+        // anchor.add(border, {
+        //     centerX: 'center',
+        //     centerY: 'center'
+        // })
 
         this.scale.on('resize', (gameSize: any) => {
             let w = gameSize.width;

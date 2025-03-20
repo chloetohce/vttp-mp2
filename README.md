@@ -43,3 +43,11 @@ From inspo: #B83A2D #DCC9A9
 
 1. [Documentation](https://primeng.org/theming)
 </details>
+
+<details>
+<summary>Phaser</summary>
+*Plugins*
+1. [Scroll-able panel](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ui-scrollablepanel/)
+2. [Scroll bar](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ui-scrollbar/)
+3. [BBCode text](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/bbcodetext/)
+</details>

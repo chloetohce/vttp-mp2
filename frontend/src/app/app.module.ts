@@ -23,6 +23,8 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { AppState } from './store/app.store';
 import { playerReducer } from './store/player/player.store';
 import { PlayerEffects } from './store/player/player.effects';
+import { EditorComponent } from './components/game/editor/editor.component';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { PlayerEffects } from './store/player/player.effects';
     HomeComponent,
     SignupComponent,
     LogoutComponent,
+    EditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ import { PlayerEffects } from './store/player/player.effects';
     ReactiveFormsModule,
     StoreModule.forRoot<AppState>({auth: authReducer, player: playerReducer}),
     EffectsModule.forRoot([AuthEffects, PlayerEffects]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    MonacoEditorModule.forRoot()
   ],
   providers: [
     provideAnimationsAsync(),
