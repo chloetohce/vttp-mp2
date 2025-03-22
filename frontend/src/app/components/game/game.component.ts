@@ -11,6 +11,7 @@ import { Menu } from './scenes/Menu';
 import { Lesson } from './scenes/Lesson';
 import { Editor } from './scenes/Editor';
 import { EditorComponent } from './editor/editor.component';
+import { CodeExecutionService } from '../../services/game/code-execution.service';
 
 @Component({
   selector: 'app-game',
@@ -21,12 +22,15 @@ import { EditorComponent } from './editor/editor.component';
 export class GameComponent implements OnInit, OnDestroy {
   private store: Store = inject(Store);
   private actionMapper = inject(ActionMapperService)
+  private codeService = inject(CodeExecutionService)
 
   @ViewChild(EditorComponent) editorComponent!: EditorComponent
 
   scene!: Phaser.Scene;
   game!: Phaser.Game;
   sceneCallback!: (scene: Phaser.Scene) => void;
+
+  isEditorActive: boolean = false;
 
   private config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
@@ -56,6 +60,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
     this.game.registry.set('store', this.store);
     this.game.registry.set('actionMapper', this.actionMapper)
+    this.game.registry.set('codeService', this.codeService)
 
     EventBus.on('current-scene-ready', (scene: Phaser.Scene) => {
       this.scene = scene;
@@ -63,7 +68,10 @@ export class GameComponent implements OnInit, OnDestroy {
       if (this.sceneCallback) {
         this.sceneCallback(scene);
       }
-    });
+    })
+    .on('editor-scene-active', (isActive: boolean) => {
+      this.isEditorActive = isActive;
+    })
 
     window.addEventListener('resize', () => {
       this.game.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight)

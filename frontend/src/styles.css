@@ -18,7 +18,7 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    position: fixed; /* This prevents mobile browser address bar issues */
+    position: fixed;
   }
   
   app-root, app-game {
@@ -34,7 +34,6 @@ html, body {
     position: relative;
   }
   
-  /* This ensures the canvas itself doesn't cause overflow */
   canvas {
     display: block;
     position: absolute;

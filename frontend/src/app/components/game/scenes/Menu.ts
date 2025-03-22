@@ -31,6 +31,8 @@ export class Menu extends Phaser.Scene {
     }
 
     create() {
+        this.add.rectangle(0,0, this.width, this.height, 0x18347a, 0.9)
+            .setOrigin(0)
         const border = this.add.nineslice(
             this.width / 2,
             this.height / 2,

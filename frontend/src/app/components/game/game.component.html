@@ -1,4 +1,11 @@
-<div class="game-container">
-    <app-editor class="editor-container"></app-editor>
 
+<div>
+    <div class="game-container">
+    </div>
+
+    @if (isEditorActive) {
+
+        <app-editor class="editor-container"></app-editor>
+    }
+    
 </div>

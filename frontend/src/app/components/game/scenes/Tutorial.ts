@@ -40,7 +40,7 @@ export class Tutorial extends Phaser.Scene {
             border.setSize(w, h);
         });
 
-        let dialogue = this.scene.launch(SCENES.DIALOGUE, 'demo' as Object)
+        let dialogue = this.scene.launch(SCENES.DIALOGUE, {key: 'demo'})
 
         // border.setInteractive({useHandCursor: true})
         //     .on('pointerup', () => {

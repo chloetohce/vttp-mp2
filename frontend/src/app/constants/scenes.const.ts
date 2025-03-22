@@ -7,3 +7,9 @@ export const SCENES = {
     LESSON: 'lesson',
     EDITOR: 'editor'
 }
+
+export const STAGES = [
+    "Basics",
+    "Arrays",
+    "Loops"
+]

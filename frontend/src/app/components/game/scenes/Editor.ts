@@ -1,20 +1,31 @@
+import { firstValueFrom, of } from "rxjs";
 import { SCENES } from "../../../constants/scenes.const";
+import { CodeExecutionService } from "../../../services/game/code-execution.service";
 import { EventBus } from "../bootstrap/eventbus";
 
 export class Editor extends Phaser.Scene {
+  // Constants
   private width!: number;
   private height!: number;
+  private stage!: number;
+
+  // Helpers and services
+  private codeService!: CodeExecutionService
 
   // Scene Objects
   private btnRunCode!: Phaser.GameObjects.Text;
+  private stdOutContainer!: Phaser.GameObjects.Container;
+  private stdOutText!: Phaser.GameObjects.Text;
 
   constructor() {
     super(SCENES.EDITOR);
   }
 
-  init() {
+  init(data: any) {
     this.width = this.game.renderer.width;
     this.height = this.game.renderer.height;
+    this.stage = data.stage;
+    this.codeService = this.game.registry.get('codeService')
   }
 
   create() {
@@ -31,9 +42,20 @@ export class Editor extends Phaser.Scene {
         color: '#ffffff'
     }).setInteractive({useHandCursor: true})
         .on('pointerup', () => {
-            EventBus.emit('editor-execute-code');
+            EventBus.emit('editor-execute-code', this.stage);
         })
 
     EventBus.emit('editor-scene-active', true);
+
+    this.stdOutContainer = this.add.container(0, this.btnRunCode.getBottomCenter().y + 5);
+
+    this.stdOutText = this.add.text(2, 2, "")
+    this.stdOutContainer.add(this.stdOutText)
+
+    // this.scene.launch(SCENES.DIALOGUE, {key: this.stage})
+  }
+
+  override async update() {
+    this.stdOutText.setText(await firstValueFrom(this.codeService.stdOut$))
   }
 }

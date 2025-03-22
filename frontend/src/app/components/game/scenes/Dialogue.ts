@@ -33,7 +33,7 @@ export class Dialogue extends Phaser.Scene {
         super(SCENES.DIALOGUE);
     }
 
-    init(key: string) {
+    init(data: any) {
         this.width = this.game.renderer.width;
         this.height = this.game.renderer.height;
         this.chatX = this.width * 0.7
@@ -41,7 +41,7 @@ export class Dialogue extends Phaser.Scene {
         this.choicesY = this.height * 0.8
         this.chatWidth = this.width - this.chatX
 
-        this.dataKey = key;
+        this.dataKey = data.key;
     }
 
     preload() {

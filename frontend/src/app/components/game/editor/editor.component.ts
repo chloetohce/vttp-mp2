@@ -2,11 +2,13 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  inject,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { EventBus } from '../bootstrap/eventbus';
 import * as monaco from 'monaco-editor';
+import { CodeExecutionService } from '../../../services/game/code-execution.service';
 
 @Component({
   selector: 'app-editor',
@@ -15,9 +17,11 @@ import * as monaco from 'monaco-editor';
   styleUrl: './editor.component.css',
 })
 export class EditorComponent implements OnInit {
-  protected isActive!: boolean;
-  protected editor!: monaco.editor.IStandaloneCodeEditor;
+  private service = inject(CodeExecutionService)
 
+  protected isActive: boolean = false;
+  protected editor!: monaco.editor.IStandaloneCodeEditor;
+  @ViewChild('editorElement', { static: true }) editorElementRef!: ElementRef;
   protected editorOptions: monaco.editor.IStandaloneEditorConstructionOptions =
     {
       theme: 'vs-dark',
@@ -28,15 +32,15 @@ export class EditorComponent implements OnInit {
       lineNumbersMinChars: 2,
     };
 
+  // TODO: Find a better way to pass in context data
   ngOnInit(): void {
     EventBus
       .on('editor-scene-active', (isActive: boolean) => {
         this.isActive = isActive;
-        if (!isActive) {
-        } else {
-        }
-      }).on('editor-execute-code', () => {
-        this.executeCode()
+      })
+      .on('editor-execute-code', (stage: number) => {
+        console.log(stage)
+        this.executeCode(stage)
       });
   }
 
@@ -44,7 +48,8 @@ export class EditorComponent implements OnInit {
     this.editor = editor;
   }
 
-  private executeCode() {
+  private executeCode(stage: number) {
     console.log(this.editor.getValue())
+    this.service.sendCodeToServer(this.editor.getValue(), stage)
   }
 }
