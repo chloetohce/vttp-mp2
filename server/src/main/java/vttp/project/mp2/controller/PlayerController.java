@@ -1,5 +1,7 @@
 package vttp.project.mp2.controller;
 
+import java.util.concurrent.ExecutionException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +22,7 @@ public class PlayerController {
     private PlayerDataService playerDataService;
     
     @GetMapping("data")
-    public ResponseEntity<PlayerData> getPlayerData(@RequestParam(required=true) String username) {
+    public ResponseEntity<PlayerData> getPlayerData(@RequestParam(required=true) String username) throws InterruptedException, ExecutionException {
         System.out.println(playerDataService.getPlayerData(username));
         return ResponseEntity.ok(playerDataService.getPlayerData(username));
     }
@@ -29,7 +31,7 @@ public class PlayerController {
     public ResponseEntity<String> updatePlayerData(
         @RequestParam(required = true) String username,
         @RequestBody PlayerData data
-    ) {
+    ) throws InterruptedException, ExecutionException {
         // TODO: error handling if necessary
         playerDataService.updatePlayerData(data);
         

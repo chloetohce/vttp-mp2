@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import vttp.project.mp2.model.game.Bot;
-
 public class PlayerData {
     // Stored in MySQL
     private String username;

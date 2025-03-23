@@ -1,6 +1,7 @@
 package vttp.project.mp2.controller;
 
 import java.io.StringReader;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody User newUser) {
+    public ResponseEntity<String> signup(@RequestBody User newUser) throws InterruptedException, ExecutionException {
         JsonObject message = userService.signup(newUser);
 
         if (message.isEmpty()) {

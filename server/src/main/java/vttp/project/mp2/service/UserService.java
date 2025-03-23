@@ -1,6 +1,7 @@
 package vttp.project.mp2.service;
 
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -50,7 +51,7 @@ public class UserService implements UserDetailsService{
     }
 
     @Transactional
-    public JsonObject signup(User input) {
+    public JsonObject signup(User input) throws InterruptedException, ExecutionException {
         input.setPassword(passwordEncoder.encode(input.getPassword()));
 
         // Check if username or email already exists
