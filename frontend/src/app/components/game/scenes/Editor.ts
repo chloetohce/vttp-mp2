@@ -56,6 +56,11 @@ export class Editor extends Phaser.Scene {
   }
 
   override async update() {
+    if ((await firstValueFrom(this.codeService.loading$)) == true ) {
+      this.btnRunCode.setText("...")
+    } else {
+      this.btnRunCode.setText("Run Code")
+    }
     this.stdOutText.setText(await firstValueFrom(this.codeService.stdOut$))
   }
 }

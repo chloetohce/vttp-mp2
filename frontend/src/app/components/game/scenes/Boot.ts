@@ -30,7 +30,7 @@ export class Boot extends Phaser.Scene {
             .pipe(take(1)))
         
         if (stage == 0) {
-            this.scene.start(SCENES.EDITOR)
+            this.scene.start(SCENES.MENU)
         } else {
             this.scene.start(SCENES.MENU)
         }

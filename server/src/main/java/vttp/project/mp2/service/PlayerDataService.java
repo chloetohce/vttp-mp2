@@ -12,7 +12,9 @@ public class PlayerDataService {
     private PlayerRepository repository;
 
     public PlayerData getPlayerData(String username) {
-        return repository.getPlayerData(username);
+        PlayerData sql = repository.getPlayerData(username);
+
+        return null;
     }
 
     public int updatePlayerData(PlayerData data) {

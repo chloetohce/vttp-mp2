@@ -10,18 +10,32 @@ export class CodeExecutionService implements OnDestroy {
   private http = inject(HttpClient)
 
   private codeStdOut = new BehaviorSubject<string>("")
+  private loading = new BehaviorSubject<boolean>(false)
 
   stdOut$: Observable<string> = this.codeStdOut.asObservable()
+  loading$ = this.loading.asObservable();
 
   constructor() { }
 
   sendCodeToServer(code: string, stage: number) {
+    this.loading.next(true)
     const payload: Code = {
       code: code,
       context: {stage: stage}
     }
-    this.http.post<string>('/api/code/execute', payload)
-      .subscribe(v => this.codeStdOut.next(v))
+    this.http.post<{message: string}>('/api/code/execute', payload)
+      .subscribe({
+        next: v => {
+          this.loading.next(false)
+          console.log(v)
+          this.codeStdOut.next(v.message)
+        },
+        error: v => {
+          this.loading.next(false)
+          console.log(v)
+          this.codeStdOut.next(v.message)
+        }
+      })
   }
 
   ngOnDestroy(): void {

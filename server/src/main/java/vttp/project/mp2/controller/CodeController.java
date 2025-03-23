@@ -1,6 +1,7 @@
 package vttp.project.mp2.controller;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObjectBuilder;
+import vttp.project.mp2.exception.CodeExecutionException;
+import vttp.project.mp2.exception.CodeWrongAnswerException;
 import vttp.project.mp2.service.CodeExecutionService;
 import vttp.project.mp2.utilities.SecurityUtils;
 
@@ -21,13 +26,30 @@ public class CodeController {
     
     @PostMapping("/execute")
     public ResponseEntity<String>  executeCode(@RequestBody String payload) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
         try {
-            service.executeCode(payload, SecurityUtils.getCurrentUsername());
-        } catch (IOException e) {
+            String result = service.executeCode(payload, SecurityUtils.getCurrentUsername());
+            return ResponseEntity.ok().body(builder
+                .add("message", result)
+                .build().toString()
+            );
+        } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Something went wrong.");
+            return ResponseEntity.badRequest().body(
+                builder.add("message", "Something went wrong")
+                .build().toString()
+            );
+        } catch (CodeExecutionException e) {
+            return ResponseEntity.ok().body(
+                builder.add("message", e.getMessage())
+                .build().toString()
+            );
+        } catch (CodeWrongAnswerException e) {
+            return ResponseEntity.badRequest().body(
+                builder.add("message", e.getMessage())
+                .build().toString()
+            );
         }
 
-        return ResponseEntity.ok().body("");
     }
 }

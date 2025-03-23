@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -48,6 +49,7 @@ public class UserService implements UserDetailsService{
                 .formatted(email)));
     }
 
+    @Transactional
     public JsonObject signup(User input) {
         input.setPassword(passwordEncoder.encode(input.getPassword()));
 
