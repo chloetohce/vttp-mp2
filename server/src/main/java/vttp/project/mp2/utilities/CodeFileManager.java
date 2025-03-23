@@ -22,18 +22,18 @@ public class CodeFileManager {
 
     public static final String COL_NAME = "game-code";
 
-    private Map<String, Object> getGameFile(String key) throws InterruptedException, ExecutionException {
+    public DocumentSnapshot getGameFile(String key) throws InterruptedException, ExecutionException {
         DocumentReference doc = db.collection(COL_NAME).document(key);
         ApiFuture<DocumentSnapshot> future = doc.get();
         DocumentSnapshot document = future.get();
 
         System.out.println(document.getData());
 
-        return document.getData();
+        return document;
     }
 
     public void addGameFiles(String key, String userFile, File folder) throws InterruptedException, ExecutionException, IOException {
-        Map<String, Object> document = getGameFile(key);
+        Map<String, Object> document = getGameFile(key).getData();
 
         String entrypoint = document.getOrDefault("entrypoint", "")
             .equals("") ? userFile : document.get("entrypoint").toString();

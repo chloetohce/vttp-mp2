@@ -40,7 +40,7 @@ public class CodeController {
                 .build().toString()
             );
         } catch (CodeExecutionException e) {
-            return ResponseEntity.ok().body(
+            return ResponseEntity.badRequest().body(
                 builder.add("message", e.getMessage())
                 .build().toString()
             );

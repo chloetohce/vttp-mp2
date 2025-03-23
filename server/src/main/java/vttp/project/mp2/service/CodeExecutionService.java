@@ -23,9 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.cloud.firestore.DocumentSnapshot;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
 import vttp.project.mp2.exception.CodeExecutionException;
 import vttp.project.mp2.exception.CodeWrongAnswerException;
@@ -77,12 +80,13 @@ public class CodeExecutionService {
         File folder = saveCodeToFile(code, stage, username);
 
         codeManager.addGameFiles(Integer.toString(stage), extractClassName(code), folder);
+        DocumentSnapshot doc = codeManager.getGameFile(Integer.toString(stage));
         File zip = createZipFile("%s_%s".formatted(username, stage), folder);
         String encodedZip = encodeZipFile(zip);
 
         System.out.println(encodedZip);
         
-        String token = sendRequest(encodedZip);
+        String token = sendRequest(encodedZip, doc.getString("expected_output"));
         deleteFolder(folder);
         String response = handleResponse(token);
 
@@ -96,8 +100,12 @@ public class CodeExecutionService {
      * @param encodedZip bse64 encoded zip file
      * @return request token (used to access result output)
      */
-    private String sendRequest(String encodedZip) {
-        String reqJson = Json.createObjectBuilder()
+    private String sendRequest(String encodedZip, String expectedOutput) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        if (expectedOutput != null) 
+            builder.add("expected_output", expectedOutput);
+
+        String reqJson = builder
             .add("source_code", "")
             .add("language_id", 89)
             .add("additional_files", encodedZip)
