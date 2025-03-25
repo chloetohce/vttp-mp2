@@ -14,15 +14,18 @@ export class Tutorial extends Phaser.Scene {
     preload() {
         this.load.image('border', '/phaser/border.png');
         this.store = this.game.registry.get('store')
-        
+        this.load.image('bg-lab', '/phaser/bg/home.png')
     }
 
     create() {
         const width = this.game.renderer.width;
         const height = this.game.renderer.height;
 
-        // Getting anchor plugin
-        // const anchor = (this.plugins.get('rexanchorplugin') as any)
+        const bg = this.add.image(width/2, height/2, 'bg-lab')
+            bg.setOrigin(0.5)
+            .setScale(height / bg.height)
+            .setAlpha(0.5)
+            
         
         const border = this.add.nineslice(
             width / 2,
@@ -45,7 +48,7 @@ export class Tutorial extends Phaser.Scene {
             border.setSize(w, h);
         });
 
-        let dialogue = this.scene.launch(SCENES.DIALOGUE, {key: 'demo'})
+        let dialogue = this.scene.launch(SCENES.DIALOGUE, {key: 'tutorial', speaker: 'embra'})
 
         EventBus.on('dialogue-end', () => {
             this.store.dispatch(increaseStage({currStage: 0}))

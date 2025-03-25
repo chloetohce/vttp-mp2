@@ -1,1 +1,27 @@
+<!-- vertical-navbar.component.html -->
+ @if (!isHome) {
+     <div class="vertical-navbar">
+         <div class="logo">
+           <i class="pi pi-home"></i>
+         </div>
+         <div class="nav-items">
+           <a class="nav-item" [routerLink]="['/']"  pTooltip="Home" tooltipPosition="right">
+             <i class="pi pi-home"></i>
+           </a>
+           <a class="nav-item" [routerLink]="['/game']"  pTooltip="Game" tooltipPosition="right">
+             <i class="pi pi-code"></i>
+           </a>
+
+         </div>
+         <div class="bottom-items">
+           <a class="nav-item" routerLink="/logout" pTooltip="Logout" tooltipPosition="right">
+             <i class="pi pi-sign-out"></i>
+           </a>
+           <a class="nav-item" routerLink="/profile" pTooltip="Profile" tooltipPosition="right">
+             <i class="pi pi-user"></i>
+           </a>
+         </div>
+       </div>
+
+ }
 <router-outlet></router-outlet>

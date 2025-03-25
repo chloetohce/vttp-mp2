@@ -25,6 +25,7 @@ import { playerReducer } from './store/player/player.store';
 import { PlayerEffects } from './store/player/player.effects';
 import { EditorComponent } from './components/game/editor/editor.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,13 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
     StoreModule.forRoot<AppState>({auth: authReducer, player: playerReducer}),
     EffectsModule.forRoot([AuthEffects, PlayerEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    MonacoEditorModule.forRoot()
+    MonacoEditorModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     provideAnimationsAsync(),

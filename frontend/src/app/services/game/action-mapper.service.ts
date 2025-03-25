@@ -27,16 +27,8 @@ export class ActionMapperService {
     if (act.action) {
       if (key === 'GAIN_BOT') {
         // Special case for bot objects which have a "type" property
-        const botPayload = {
-          bot: {
-            type: payload.type,
-            calls: payload.calls,
-            id: payload.id,
-            code: payload.code,
-            name: payload.name
-          }
-        };
-        this.store.dispatch(act.action({ botPayload }));
+
+        this.store.dispatch(act.action());
       } else {
         // For other actions, pass the payload directly
         this.store.dispatch(act.action(payload));

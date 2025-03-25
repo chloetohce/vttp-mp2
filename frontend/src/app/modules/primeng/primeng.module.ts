@@ -14,6 +14,7 @@ import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 const MODULES = [
@@ -30,7 +31,8 @@ const MODULES = [
   CardModule,
   DividerModule,
   IconFieldModule,
-  InputIconModule
+  InputIconModule,
+  TooltipModule
 ]
 
 @NgModule({

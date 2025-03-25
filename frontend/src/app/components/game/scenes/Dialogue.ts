@@ -15,6 +15,7 @@ export class Dialogue extends Phaser.Scene {
     chatWidth!:number
     choicesY!: number
     variables!: Record<string, string>
+    speaker!: string;
 
     // tools
     private dialogueManager!: DialogueManager;
@@ -42,13 +43,16 @@ export class Dialogue extends Phaser.Scene {
         this.chatWidth = this.width - this.chatX
 
         this.dataKey = data.key;
+        this.speaker = data.speaker
     }
 
     preload() {
         this.load.setPath('/phaser')
-        this.load.image('placeholder-chara', 'placeholder-chara.png')
         this.load.json(`dialogue-${this.dataKey}`, `dialogues/${this.dataKey}.json`)
-
+        // this.load.image('chara', `npc/${this.speaker}.png`)
+        this.load.spritesheet('chara', `npc/${this.speaker}.png`,
+            {frameWidth: 48, frameHeight: 48}
+        )
     }
     
     create() {
@@ -82,12 +86,22 @@ export class Dialogue extends Phaser.Scene {
         
         // TODO: Modify scaling and positioning based on game sprites
         this.portrait = this.add.sprite(
-            0, 0,
-            'placeholder-chara'
+            50, this.height - this.choicesY,
+            'chara'
         )
-        .setScale(0.15)
-        .setOrigin(0.1, 0)
+        .setScale(7)
+        .setOrigin(0.5, 1)
         this.choicesContainer.add(this.portrait)
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNames('chara', {
+                start: 0,
+                end: 3
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+        this.portrait.play('idle')
         
         // Preparing dialogue
         this.currentNodeSub = this.dialogueManager.currentNode$.subscribe(n => {
@@ -137,7 +151,7 @@ export class Dialogue extends Phaser.Scene {
             this.replacePlaceholders(node.text, this.variables),
             {
                 fontFamily: 'Arial',
-                fontSize: '12px',
+                fontSize: '14px',
                 color: '#ffffff',
                 padding: {x: 5, y: 5},
                 resolution: 0,
@@ -157,12 +171,11 @@ export class Dialogue extends Phaser.Scene {
         
         choices.forEach((choice, i) => {
             const choiceText = this.add.text(
-              this.portrait.getTopRight().x + 20,
+              50,
               yOffset,
               choice.text,
               {
-                fontFamily: 'Arial',
-                fontSize: '12px',
+                fontSize: '14px',
                 color: '#ffffff',
                 padding: { x: 5, y: 5 },
                 resolution: 3,

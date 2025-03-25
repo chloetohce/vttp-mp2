@@ -1,11 +1,76 @@
 {
     "start": {
-        "speaker": "",
+        "speaker": "Embra",
         "type": "text",
-        "text": "",
-        "next": "",
-        "choices": [
-            {"text": "", "next": ""}
+        "text": "Hey uh... You had quite a nasty accident. Not sure what happened. Found you lying on the ground. I took you to Dr. Everton. He did his best.",
+        "next": "question"
+    },
+    "question": {
+        "speaker": "Embra",
+        "text": "So, you alright?",
+        "choices":[
+            {
+                "text": "Who are you?",
+                "next": "memory-loss"
+            },
+            {
+                "text": "What happened?",
+                "next": "idk"
+            }
         ]
+    },
+    "idk": {
+        "speaker": "Embra",
+        "text": "No clue.",
+        "choices":[
+            {
+                "text": "Who are you?",
+                "next": "memory-loss"
+            }
+        ]
+    },
+    "memory-loss": {
+        "speaker":"Embra",
+        "text": "Ah great. Call me Embra. I live next door.",
+        "next": "explain"
+    },
+    "explain": {
+        "speaker":"Embra",
+        "text": "This is your place. You're a machinist, and a pretty good one at that. But I guess you'll have to start all over again now. ",
+        "next": "computer"
+    },
+    "computer": {
+        "speaker":"Embra",
+        "text": "I don't know the details of what you do, but I always see you tinkering around your computer. Maybe you can learn a bit more from there. Or check out Kade's learning channel. ",
+        "next": "hp"
+    },
+    "hp": {
+        "speaker":"Embra",
+        "text": "Ah and, Dr. Everton said that there might be some complications with your health. Something about implant rejection? You'll need to buy some injectors from him to regain HP. Take note that your health is linked to your energy. Too little health and you won't have any energy left for the day. ",
+        "choices":[
+            {
+                "text": "Got it thanks.",
+                "next": "bot"
+            }
+        ]
+    },
+    "bot": {
+        "speaker":"Embra",
+        "text": "I also managed to salvage one of your bots from the wreckage. Looks like one of your older models.",
+        "choices": [
+            {
+                "text": "...",
+                "next":"end",
+                "effect": [
+                    {
+                        "type": "GAIN_BOT"
+                    }
+                ]
+            }
+        ]
+    },
+    "end": {
+        "speaker":"Embra",
+        "text": "Well, good luck. See ya around. "
     }
 }
