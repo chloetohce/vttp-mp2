@@ -5,10 +5,15 @@ public class PlayerQuery {
             select * from playerData where username = ?
             """;
 
-    public static final String INSERT_ALL = """
-            insert into playerData (username, stage)
-            values(?, ?)
+    public static final String UPDATE_ALL = """
+            update playerData
+            set stage = ?, day = ?, gold = ?
+            where username = ?
             """;
 
     public static final String NEW_PLAYER = "insert into playerData (username) values(?)";
+
+    public static final String GET_STAGE = """
+                    select stage from playerData where username = ?
+                    """;
 }

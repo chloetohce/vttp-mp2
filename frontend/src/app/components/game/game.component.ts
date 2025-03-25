@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { EventBus } from './bootstrap/eventbus';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AUTO, Game } from 'phaser';
 import { Boot } from './scenes/Boot';
 import { Tutorial } from './scenes/Tutorial';
@@ -12,6 +12,17 @@ import { Lesson } from './scenes/Lesson';
 import { Editor } from './scenes/Editor';
 import { EditorComponent } from './editor/editor.component';
 import { CodeExecutionService } from '../../services/game/code-execution.service';
+import { getPlayerData } from '../../store/player/player.action';
+import { selectUsername } from '../../store/authentication/auth.store';
+import { firstValueFrom, take } from 'rxjs';
+import { AppState } from '../../store/app.store';
+import { selectStage } from '../../store/player/player.store';
+import { PlayerService } from '../../services/player.service';
+import { GameStateService } from '../../services/game/game-state.service';
+import { Inventory } from './scenes/Inventory';
+import { Bots } from './scenes/Bots';
+import { EditBot } from './scenes/EditBot';
+import { EndDay } from './scenes/EndDay';
 
 @Component({
   selector: 'app-game',
@@ -19,10 +30,11 @@ import { CodeExecutionService } from '../../services/game/code-execution.service
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
 })
-export class GameComponent implements OnInit, OnDestroy {
-  private store: Store = inject(Store);
+export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
+  private store: Store<AppState> = inject(Store);
   private actionMapper = inject(ActionMapperService)
   private codeService = inject(CodeExecutionService)
+  private gameService = inject(GameStateService)
 
   @ViewChild(EditorComponent) editorComponent!: EditorComponent
 
@@ -34,7 +46,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
-    parent: 'game-container',
+    parent: '.game-container',
     backgroundColor: '#18181B',
     scale: {
       mode: Phaser.Scale.ENVELOP,
@@ -43,25 +55,33 @@ export class GameComponent implements OnInit, OnDestroy {
       height: window.innerHeight,
     },
     pixelArt: true,
-    scene: [Boot, Tutorial, Dialogue, Menu, Lesson, Editor],
-    plugins: {
-      scene: [
-        {
-          key: 'rexUI',
-          plugin: UIPlugin,
-          mapping: 'rexUI'
-        }
-      ]
-    }
+    scene: [Boot, Tutorial, Dialogue, Menu, Lesson, Editor, EditBot, EndDay ,Inventory, Bots],
   };
 
-  ngOnInit(): void {
-    this.game = new Game(this.config);
-
+  async ngOnInit() {
+    const username: string = await firstValueFrom(this.store.select(selectUsername)
+    .pipe(take(1)))
+    this.store.dispatch(getPlayerData({username: username}))
+    
+    this.game = new Game(this.config)
+    
     this.game.registry.set('store', this.store);
     this.game.registry.set('actionMapper', this.actionMapper)
     this.game.registry.set('codeService', this.codeService)
+    this.game.registry.set('svc', this.gameService)
+    this.game.registry.set('username', username)
+    
+    
+    
 
+    window.addEventListener('resize', () => {
+      this.game.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight)
+      this.game.scale.refresh()
+    })
+
+  }
+
+  ngAfterViewInit(): void {
     EventBus.on('current-scene-ready', (scene: Phaser.Scene) => {
       this.scene = scene;
 
@@ -72,12 +92,9 @@ export class GameComponent implements OnInit, OnDestroy {
     .on('editor-scene-active', (isActive: boolean) => {
       this.isEditorActive = isActive;
     })
-
-    window.addEventListener('resize', () => {
-      this.game.scale.displaySize.setAspectRatio(window.innerWidth / window.innerHeight)
-      this.game.scale.refresh()
+    .on('editor-bot-active', (isActive: boolean, code: string) => {
+      this.isEditorActive = isActive;
     })
-
   }
 
   ngOnDestroy(): void {

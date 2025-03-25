@@ -1,8 +1,11 @@
 import { inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { SCENES } from "../../../constants/scenes.const";
+import { EventBus } from "../bootstrap/eventbus";
+import { endDay, increaseStage } from "../../../store/player/player.action";
 
 export class Tutorial extends Phaser.Scene {
+    private store!: Store;
 
     constructor() {
         super('tutorial');
@@ -10,6 +13,8 @@ export class Tutorial extends Phaser.Scene {
 
     preload() {
         this.load.image('border', '/phaser/border.png');
+        this.store = this.game.registry.get('store')
+        
     }
 
     create() {
@@ -42,9 +47,20 @@ export class Tutorial extends Phaser.Scene {
 
         let dialogue = this.scene.launch(SCENES.DIALOGUE, {key: 'demo'})
 
+        EventBus.on('dialogue-end', () => {
+            this.store.dispatch(increaseStage({currStage: 0}))
+            this.store.dispatch(endDay())
+            this.scene.stop(SCENES.DIALOGUE)
+            this.scene.start(SCENES.ENDDAY)
+        })
+
         // border.setInteractive({useHandCursor: true})
         //     .on('pointerup', () => {
         //         this.scene.setVisible(!this.scene.isVisible('dialogue'), 'dialogue')
         //     })
+    }
+
+    override update(time: number, delta: number): void {
+        
     }
 }

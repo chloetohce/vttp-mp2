@@ -5,7 +5,11 @@ export const SCENES = {
     MENU: 'menu',
     FORUM: 'forum',
     LESSON: 'lesson',
-    EDITOR: 'editor'
+    EDITOR: 'editor',
+    INVENTORY: 'inventory',
+    BOTS: 'bots',
+    EDITBOT: 'editBots',
+    ENDDAY: 'endDay'
 }
 
 export const STAGES = [

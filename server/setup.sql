@@ -25,6 +25,7 @@ create table playerData (
 
 create table bots (
     id int auto_increment not null,
+    name varchar(128),
     type varchar(64) not null,
     calls int not null,
     username varchar(255) not null,

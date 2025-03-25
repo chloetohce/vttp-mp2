@@ -17,7 +17,7 @@ export const PrimeNGPreset = definePreset(Aura, {
             900: '{lime.900}',
             950: '{lime.950}'
         },
-        dark: {
+        dark: { 
             surface: {
                 0: '#ffffff',
                 50: '{slate.50}',
@@ -75,6 +75,9 @@ export const PrimeNGPreset = definePreset(Aura, {
                     width: '2px',
                     color: '{secondary.300}',
                     offset: '1px'
+                },
+                text: {
+                    color: '{slate.50}'
                 }
             },
             light: {

@@ -1,6 +1,73 @@
-<button type="button" [routerLink]="['/login']">Login</button>
-<br>
-<button type="button" [routerLink]="['/signup']">Signup</button>
-<br>
-<app-logout [type]="'icon'"></app-logout>
-<app-logout [type]="'button'"></app-logout>
+<p-menubar class="menu-bar" [model]="items">
+  <ng-template #start>
+      <p class="green">bitrunner</p>
+  </ng-template>
+  <ng-template #item let-item let-root="root">
+    <a pRipple class="flex items-center p-menubar-item-link" [routerLink]="item.routerLink">
+      <span>{{ item.label }}</span>
+      <i *ngIf="item.items" [ngClass]="['ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+  </a>
+  </ng-template>
+  <ng-template #end>
+      <div class="flex flex-row m-2">
+          @if (isLoggedIn$ | async) {
+            <app-logout [type]="'button'"></app-logout>
+          } @else {
+            <p-button type="button" [routerLink]="['/login']">Login</p-button>
+
+          }
+      </div>
+  </ng-template>
+</p-menubar>
+
+<div class="hero-container">
+    <div class="hero-content">
+      <h1 class="hero-title">Learn to Code</h1>
+      <h2 class="hero-subtitle">with fun</h2>
+      <p class="hero-description">
+        Experience a fun and interactive way to learn coding through challenges, while embarking on an epic adventure.
+      </p>
+      <div class="hero-actions">
+        <p-button label="Sign Up" [routerLink]="['/signup']" styleClass="p-button-raised mr-2"></p-button>
+
+        <p class="small">
+          Already have an account? <a [routerLink]="['/login']">Login</a>
+        </p>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="coding-bg.jpg" alt="Hero Image">
+    </div>
+  </div>
+
+  <div class="reviews-container">
+    <div class="reviews-header">
+      <h2>What Our Learners Say</h2>
+      <p>Join thousands of coders who've leveled up their skills through our game</p>
+    </div>
+  
+    <p-carousel [value]="reviews" [numVisible]="3" [numScroll]="1" [circular]="true" [autoplayInterval]="5000">
+      <ng-template let-review pTemplate="item">
+        <div class="review-card">
+          <div class="review-rating">
+            <i class="pi pi-star-fill" style="color: #FFC107;" *ngFor="let star of [].constructor(review.rating)"></i>
+            <i class="pi pi-star" style="color: #d5d0d0;" *ngFor="let star of [].constructor(5-review.rating)"></i>
+          </div>
+          <div class="review-content">
+            <p>"{{ review.content }}"</p>
+          </div>
+          <div class="review-author">
+            <div class="author-info">
+              <h4>{{ review.name }}</h4>
+              <span>{{ review.title }}</span>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+  
+    <div class="reviews-cta">
+      <p>Ready to join them?</p>
+      <p-button [routerLink]="['/signup']" label="Start Coding Adventure" styleClass="p-button-raised"></p-button>
+    </div>
+  </div>

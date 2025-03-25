@@ -1,5 +1,6 @@
 import { createReducer, createSelector, on } from "@ngrx/store"
 import { clearTokens, loadTokensSuccess, setLoggedIn, setRefreshToken, setToken } from "./auth.actions"
+import { jwtDecode } from "jwt-decode"
 
 export interface AuthState {
     isLoggedIn: boolean,
@@ -56,4 +57,9 @@ export const selectToken = createSelector(
 export const selectRefreshToken = createSelector(
     selectAuthState,
     (state: AuthState) => state.refreshToken
+)
+
+export const selectUsername = createSelector(
+    selectAuthState,
+    (state: AuthState) => jwtDecode(state.refreshToken ?? '').sub ?? ''
 )

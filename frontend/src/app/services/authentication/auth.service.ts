@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   login(login: User) {
-    this.http
+    return this.http
       .post<AuthResponse>('/auth/login', login)
       .subscribe({
         next: (response) => {
@@ -90,8 +90,8 @@ export class AuthService {
   }
 
   logout() {
+    console.log("logging out")
     this.store.dispatch(clearTokens())
-    this.router.navigate(['/']);
   }
 
   /**
@@ -108,6 +108,7 @@ export class AuthService {
     if (!await this.isTokenValid("token")) {
       this.store.dispatch(refreshToken())
     }
+    this.store.dispatch(setLoggedIn({isLoggedIn: true}))
     return true;
   }
 
@@ -137,4 +138,5 @@ export class AuthService {
       )
   }
 
+  
 }

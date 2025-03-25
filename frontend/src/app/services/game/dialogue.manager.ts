@@ -1,6 +1,7 @@
 import { DialogueNode } from "../../model/dialogue.model";
 import { BehaviorSubject } from "rxjs";
 import { ActionMapperService } from "./action-mapper.service";
+import { EventBus } from "../../components/game/bootstrap/eventbus";
 
 export class DialogueManager {
     private actionMapper;
@@ -43,7 +44,8 @@ export class DialogueManager {
             const currChoiceNode = this.currentNode.choices[choiceIndex]
             if (currChoiceNode.effect) {
                 for (const e of currChoiceNode.effect) {
-                    this.actionMapper.dispatchActionString(e.type)
+                    console.log(e.payload)
+                    this.actionMapper.dispatchActionString(e.type, e.payload)
                 }
 
             }
@@ -60,6 +62,7 @@ export class DialogueManager {
             this.currentNode = null;
             // TODO: Is completing it the same as sending null?
             this.currentNodeSubject.next(null)
+            EventBus.emit('dialogue-end')
             return null;
         }
         

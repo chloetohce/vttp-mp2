@@ -58,8 +58,8 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
     }),
     providePrimeNG({
       theme: {
-        preset: PrimeNGPreset
-      }
+        preset: PrimeNGPreset,
+    }
     })
   ],
   bootstrap: [AppComponent]

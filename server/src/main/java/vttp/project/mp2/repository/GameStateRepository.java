@@ -20,6 +20,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 
 import vttp.project.mp2.model.Bot;
+import vttp.project.mp2.model.Item;
 import vttp.project.mp2.model.PlayerData;
 import vttp.project.mp2.utilities.Constant;
 
@@ -37,7 +38,20 @@ public class GameStateRepository {
         DocumentSnapshot document = ref.get().get();
         data.setEnergy(document.get("energy", Integer.class));
         data.setHp(document.get("hp", Integer.class));
-        data.setItems((List<String>) document.get("items"));
+
+        List<Map<String, Object>> itemsMap = (List<Map<String, Object>>) document.get("items");
+        List<Item> items = itemsMap.stream()
+            .map(m -> {
+                Item i = new Item();
+                i.setEffect((Map<String, String>) m.get("effect"));
+                i.setName(m.get("name").toString());
+                i.setDesc(m.get("desc").toString());
+                return i;
+            })
+            .toList();
+        
+        data.setItems(items);
+        
 
         CollectionReference bots = db.collection(Constant.COL_BOTS);
         Query botsQuery = bots.whereEqualTo("username", username);
@@ -46,7 +60,7 @@ public class GameStateRepository {
         for (DocumentSnapshot d : querySnapshot.get().getDocuments()) {
             Bot b = new Bot();
             b.setCalls(d.get("calls", Integer.class));
-            b.setId(d.getLong("id"));
+            b.setId(d.get("id", Integer.class));
             b.setType(d.getString("type"));
             botsList.add(b);
         }
@@ -58,7 +72,18 @@ public class GameStateRepository {
         Map<String, Object> gameStateData = new HashMap<>();
         gameStateData.put("energy", data.getEnergy());
         gameStateData.put("hp", data.getHp());
-        gameStateData.put("items", data.getItems());
+
+        List<Map<String, Object>> mappedList = data.getItems()
+            .stream()
+            .map(i -> {
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", i.getName());
+                map.put("effect", i.getEffect());
+                map.put("desc", i.getDesc());
+                return map;
+            })
+            .toList();
+        gameStateData.put("items", mappedList);
 
         ApiFuture<WriteResult> future = db.collection(Constant.COL_GAME_STATE)
             .document(data.getUsername())

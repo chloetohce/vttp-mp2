@@ -20,7 +20,7 @@ public class PlayerData {
 
     private int energy;
 
-    private List<String> items;
+    private List<Item> items;
 
     // both
     private List<Bot> bots;
@@ -54,11 +54,17 @@ public class PlayerData {
     public int getEnergy() {return energy;}
     public void setEnergy(int energy) {this.energy = energy;}
 
-    public List<String> getItems() {return items;}
-    public void setItems(List<String> items) {this.items = items;}
+    public List<Item> getItems() {return items;}
+    public void setItems(List<Item> items) {this.items = items;}
 
     public List<Bot> getBots() {return bots;}
     public void setBots(List<Bot> bots) {this.bots = bots;}
+
+    @Override
+    public String toString() {
+        return "PlayerData [username=" + username + ", stage=" + stage + ", day=" + day + ", gold=" + gold + ", hp="
+                + hp + ", energy=" + energy + ", items=" + items + ", bots=" + bots + "]";
+    }
 
     
     

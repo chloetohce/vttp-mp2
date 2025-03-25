@@ -14,7 +14,7 @@ export class Dialogue extends Phaser.Scene {
     chatY!: number
     chatWidth!:number
     choicesY!: number
-    demoStr: string = "this is a demo"
+    variables!: Record<string, string>
 
     // tools
     private dialogueManager!: DialogueManager;
@@ -134,7 +134,7 @@ export class Dialogue extends Phaser.Scene {
 
         this.currDialogue = this.add.text(
             x, y + yOffset,
-            this.replacePlaceholders(node.text, {demoString: 'this is a demo'}),
+            this.replacePlaceholders(node.text, this.variables),
             {
                 fontFamily: 'Arial',
                 fontSize: '12px',

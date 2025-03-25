@@ -2,7 +2,7 @@
     "start": {
       "id": "start",
       "type": "dialogue",
-      "text": "Hello traveler! What brings you to this part\n of the world? ${demoString}",
+      "text": "Hello traveler! What brings you to this part\n of the world?",
       "speaker": "Villager",
       "next": "options"
     },
@@ -23,12 +23,27 @@
           ]
         },
         {
-          "text": "Ask about monsters nearby",
+          "text": "Gain injector",
           "next": "monster_info",
           "condition": {
             "key": "TEST",
-            "payload": false
-          }
+            "payload": true
+          },
+          "effect": [
+            {
+              "type": "GAIN_INJECTOR"
+            },
+            {
+              "type": "GAIN_BOT",
+              "payload": {
+                "type": "basic",
+                "calls": 2,
+                "id": 0,
+                "code": "",
+                "name": ""
+              }
+            }
+          ]
         },
         {
           "text": "Say goodbye",

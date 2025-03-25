@@ -1,18 +1,68 @@
+<!-- sign-in.component.html -->
+<div class="sign-in-container">
+    <p-card styleClass="sign-in-card">
+      <ng-template pTemplate="header">
+        <div class="header">
+          <h1>Sign In</h1>
+        </div>
+        <p>Welcome back! Please enter your details</p>
+        @if (errorMsg$ | async; as err) {
+
+            <p-message severity="error">{{err}}</p-message>
+        }
+
+      </ng-template>
+      
+  
+      <form [formGroup]="form" (ngSubmit)="processLogin($event)">
+        <div class="field">
+          <span class="p-input-icon-left w-full">
+            <p-floatlabel variant="on">
+                <p-iconfield>
+                    <p-inputicon class="pi pi-user" />
+                    <input pInputText id="username" formControlName="username" pSize="large" variant="filled" />
+                </p-iconfield>
+                <label for="on_label">Username</label>
+            </p-floatlabel>
+          </span>
+        </div>
+  
+        <div class="field">
+          <span class="p-input-icon-left w-full">
+            <span class="p-input-icon-left w-full">
+                <p-floatlabel variant="on">
+                    <p-iconfield>
+                        <p-inputicon class="pi pi-lock" />
+                        <input pInputText id="password" formControlName="password" 
+                            type="password" pSize="large" variant="filled" />
+                    </p-iconfield>
+                    <label for="password">Password</label>
+                </p-floatlabel>
+              </span>
+          </span>
+        </div>
+  
+        <p-button 
+          type="submit" 
+          label="Sign In" 
+          styleClass="w-full mb-3" 
+          [loading]="loading"
+        ></p-button>
+
+        
+        <p-divider align="center">
+          <span class="text-600">OR</span>
+        </p-divider>
+  
+        <div class="text-center">
+          <span>Don't have an account? </span>
+          <a href="#" class="sign-up-link">Sign up</a>
+        </div>
+      </form>
+  
+    </p-card>
+  </div>
+
 <div *ngIf="errorMsg$ | async as errorMsg">
     <p>{{errorMsg}}</p>
 </div>
-
-<form [formGroup]="form" (ngSubmit)="processLogin($event)" >
-    <p-floatlabel variant="on">
-        <input pInputText id="username" formControlName="username" pSize="small" variant="filled">
-        <label for="username">Username</label>
-    </p-floatlabel>
-    
-    <p-floatlabel variant="on">
-        <p-password formControlName="password" [toggleMask]="true" size="small" variant="filled" [feedback]="false"></p-password>
-        <label for="pasword">Password</label>
-    </p-floatlabel>
-
-
-    <p-button type="submit" label="Submit" styleClass="test"/>
-</form>

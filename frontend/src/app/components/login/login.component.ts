@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../../model/auth.model';
-import { Observable, Subscription } from 'rxjs';
+import { first, Observable, Subscription, tap } from 'rxjs';
 import { AuthService } from '../../services/authentication/auth.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   form!: FormGroup
 
   errorMsg$!: Observable<string | null>
+  loading = false;
 
   ngOnInit(): void {
       this.form = this.fb.group({
@@ -28,9 +29,11 @@ export class LoginComponent implements OnInit {
   }
 
   protected processLogin(event: Event) {
+    this.loading = true;
     event.preventDefault()
     const loginInfo: User = this.form.value;
     this.authService.login(loginInfo)
+
   }
 
 }

@@ -63,5 +63,14 @@ export class AuthEffects {
         )
     )
 
-
+    clearTokens$ = createEffect(() => 
+        this.actions$.pipe(
+            ofType(clearTokens),
+            tap(() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('refreshToken')
+            })
+        ),
+        {dispatch: false}
+    )
 }

@@ -32,6 +32,7 @@ import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
 import vttp.project.mp2.exception.CodeExecutionException;
 import vttp.project.mp2.exception.CodeWrongAnswerException;
+import vttp.project.mp2.model.Bot;
 import vttp.project.mp2.utilities.CodeFileManager;
 
 @Service
@@ -75,7 +76,7 @@ public class CodeExecutionService {
         JsonObject entity = reader.readObject();
         String code = entity.getString("code");
         JsonObject context = entity.getJsonObject("context");
-        int stage = context.getInt("stage");
+        int stage = context.getInt("stage", 0);
         
         File folder = saveCodeToFile(code, stage, username);
 
@@ -215,7 +216,7 @@ public class CodeExecutionService {
         return base64String;
     }
 
-    private String extractClassName(String code) {
+    public String extractClassName(String code) {
         Pattern pattern = Pattern.compile("public\\s+class\\s+(\\w+)");
         Matcher matcher = pattern.matcher(code);
         if (matcher.find()) {
