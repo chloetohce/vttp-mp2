@@ -52,7 +52,8 @@ export class EditBot extends Phaser.Scene {
       .setOrigin(0)
       .setInteractive({useHandCursor: true})
         .on('pointerup', () => {
-            this.saveBotChanges(this.bot)
+          this.saveBotChanges(this.bot)
+          this.scene.stop(SCENES.DIALOGUE)
         })
         .on('pointerover', () => {
           this.btnRun.setTint(0xaaaaaa)
@@ -68,7 +69,7 @@ export class EditBot extends Phaser.Scene {
         .setOrigin(0)
         .setInteractive({useHandCursor: true})
         .on('pointerup', () => {
-          this.scene.start(SCENES.LESSON)
+          this.scene.start(SCENES.BOTS)
           this.scene.stop(SCENES.DIALOGUE)
           EventBus.emit('editor-scene-active', false)
         })

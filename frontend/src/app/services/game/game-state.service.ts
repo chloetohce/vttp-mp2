@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.store';
 import { firstValueFrom, take, takeLast, tap } from 'rxjs';
 import { PlayerState, selectPlayerState, selectStage } from '../../store/player/player.store';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +24,15 @@ export class GameStateService {
     return this.http.post<{name: string, output: number}[]>(
       `/api/player/next/${username}`, state
     )
+  } 
+
+  reset(username: string) {
+    this.http.delete('/api/player/reset', {
+      params: new HttpParams().append('username', username)
+    })
+      .subscribe({
+        next: () => console.log("delete ok"),
+        error: (err) => console.log(err.error)
+      })
   }
 }

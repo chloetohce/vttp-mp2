@@ -33,4 +33,8 @@ public class PlayerRepository {
         rs.next();
         return rs.getInt("stage");
     }
+
+    public void reset(String username) {
+        jdbcTemplate.update(PlayerQuery.RESET, username);
+    }
 }

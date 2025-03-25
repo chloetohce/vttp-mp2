@@ -177,7 +177,7 @@ export class EndDay extends Phaser.Scene {
             play.clearTint()
         })
         .on('pointerup', () => {
-            this.scene.start(SCENES.MENU)
+            this.scene.start(SCENES.BOOT)
         })
     }
     

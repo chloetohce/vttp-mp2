@@ -23,6 +23,7 @@ import { Inventory } from './scenes/Inventory';
 import { Bots } from './scenes/Bots';
 import { EditBot } from './scenes/EditBot';
 import { EndDay } from './scenes/EndDay';
+import { GameOver } from './scenes/GameOver';
 
 @Component({
   selector: 'app-game',
@@ -55,13 +56,12 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
       height: window.innerHeight,
     },
     pixelArt: true,
-    scene: [Boot, Tutorial, Dialogue, Menu, Lesson, Editor, EditBot, EndDay ,Inventory, Bots],
+    scene: [Boot, Tutorial, Dialogue, Menu, Lesson, Editor, EditBot, EndDay ,Inventory, GameOver, Bots],
   };
 
   async ngOnInit() {
     const username: string = await firstValueFrom(this.store.select(selectUsername)
     .pipe(take(1)))
-    this.store.dispatch(getPlayerData({username: username}))
     
     this.game = new Game(this.config)
     

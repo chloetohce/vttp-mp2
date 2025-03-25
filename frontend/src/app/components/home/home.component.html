@@ -11,7 +11,9 @@
   <ng-template #end>
       <div class="flex flex-row m-2">
           @if (isLoggedIn$ | async) {
-            <p-button type="button" [routerLink]="['/logout']">Logout</p-button>
+
+            <app-logout [type]="'button'"></app-logout>
+            <!-- <p-button type="button" [routerLink]="['/logout']">Logout</p-button> -->
           } @else {
             <p-button type="button" [routerLink]="['/login']">Login</p-button>
 

@@ -157,3 +157,12 @@
   :host ::ng-deep .p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
     color: #FFC107;
   }
+
+  .flex {
+    display: flex;
+  }
+
+  .flex-row {
+    flex-direction: row;
+    align-items: center;
+  }

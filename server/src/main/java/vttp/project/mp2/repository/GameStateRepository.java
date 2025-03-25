@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -103,4 +104,14 @@ public class GameStateRepository {
         System.out.println(future.get().getUpdateTime());
     }
 
+    public void resetFields(String username) throws InterruptedException, ExecutionException {
+        Map<String, Object> data = new HashMap<>();
+        data.put("energy", 10);
+        data.put("hp", 10);
+        data.put("items", List.of());
+        ApiFuture<WriteResult> future = db.collection(Constant.COL_GAME_STATE)
+            .document(username)
+            .set(data);
+        System.out.println("RESEST PLAYER AT: "+ future.get().getUpdateTime());
+    }
 }

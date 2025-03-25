@@ -1,12 +1,9 @@
 package vttp.project.mp2.repository;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.bson.Document;
@@ -15,17 +12,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
 import com.mongodb.client.result.UpdateResult;
 
 import vttp.project.mp2.model.Bot;
@@ -122,5 +114,12 @@ public class BotRepository {
                 return b;
             })
             .toList();
+    }
+
+    public void reset(String username) {
+        jdbcTemplate.update(BotQuery.RESET, username);
+
+        Query q = Query.query(new Criteria("username").is(username));
+        mongoTemplate.remove(q, "bots");
     }
 }

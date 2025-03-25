@@ -81,8 +81,16 @@ public class PlayerDataService {
 
         old.setEnergy((int)(10 * (0.2 + 0.8 * (old.getHp() / 10))));
         old.setHp(old.getHp() - 1);
+        old.setDay(old.getDay() + 1);
 
         updatePlayerData(old);
         return result.build();
+    }
+
+    @Transactional
+    public void reset(String username) throws InterruptedException, ExecutionException {
+        repository.reset(username);
+        botRepository.reset(username);
+        gameStateRepository.resetFields(username);
     }
 }

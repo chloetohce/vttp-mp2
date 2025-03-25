@@ -10,4 +10,8 @@ public class BotQuery {
             insert into bots (name, type, calls, username)
             values (?, ?, ?, ?)
             """;
+
+    public static final String RESET = """
+            delete from bots where username = ?
+            """;
 }

@@ -9,7 +9,8 @@ export const SCENES = {
     INVENTORY: 'inventory',
     BOTS: 'bots',
     EDITBOT: 'editBots',
-    ENDDAY: 'endDay'
+    ENDDAY: 'endDay',
+    GAMEOVER: 'gameOver'
 }
 
 export const STAGES = [

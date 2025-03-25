@@ -1,5 +1,5 @@
 import { createReducer, createSelector, on } from "@ngrx/store"
-import { endDay, gainBot, getInjector, getPlayerData, getPlayerDataFailure, increaseStage, setPlayerData, updateBotCode } from "./player.action"
+import { endDay, gainBot, getInjector, getPlayerData, getPlayerDataFailure, increaseStage, restart, setPlayerData, updateBotCode } from "./player.action"
 import { Bot, Item, PlayerData } from "../../model/player-data.model"
 import { ITEMS } from "../../constants/items.const"
 import { inject, INJECTOR } from "@angular/core"
@@ -56,7 +56,7 @@ export const playerReducer = createReducer(
     })),
     on(endDay, (state) => ({
         ...state,
-        day: state.day + 1
+        day: state.day
     })),
     on(increaseStage, (state, {currStage}) => ({
         ...state,
@@ -76,6 +76,10 @@ export const playerReducer = createReducer(
     on(updateBotCode, (state, {name, code}) => ({
         ...state,
         bots: [...state.bots.filter(b => b.name !== name), {...(state.bots.find(b => b.name === name) ?? BASIC_BOT), code: code }]
+    })),
+    on(restart, (state, {username}) => ({
+        ...PLAYER_INIT,
+        username: username
     }))
 )
 
@@ -101,4 +105,9 @@ export const selectPlayerData = createSelector(
     (state: PlayerState) => ({
         ...state
     } as PlayerData)
+)
+
+export const selectHp = createSelector(
+    selectPlayerState,
+    (state: PlayerState) => state.hp
 )

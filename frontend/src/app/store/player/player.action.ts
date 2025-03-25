@@ -42,3 +42,8 @@ export const updateBotCode = createAction(
     '[Game] Update Bot Code',
     props<{name: string, code:string}>()
 )
+
+export const restart = createAction(
+    '[Game] Restart',
+    props<{username: string}>()
+)
