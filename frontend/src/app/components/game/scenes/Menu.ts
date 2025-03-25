@@ -9,7 +9,7 @@ export class Menu extends Phaser.Scene {
     // constants
     width!: number;
     height!: number;
-    iconsStr: string[] = [SCENES.LESSON, 'stats', 'inventory', 'bots', 'missions', 'map']
+    iconsStr: string[] = [SCENES.LESSON, SCENES.BOTS, 'map']
 
     // game objects
     private icons: GameObjects.Image[] = [];
@@ -17,6 +17,7 @@ export class Menu extends Phaser.Scene {
     private statusBar!: GameObjects.Rectangle;
     private hp!: GameObjects.Text;
     private energy!: GameObjects.Text;
+    private gold!: GameObjects.Text;
     private day!: GameObjects.Text;
     private endDay!: GameObjects.Text;
 
@@ -38,6 +39,7 @@ export class Menu extends Phaser.Scene {
         this.load.image('border', 'border.png');
         this.load.image('icon-health', 'icons/health.png')
         this.load.image('icon-energy', 'icons/energy.png')
+        this.load.image('icon-coin', 'icons/coin.png')
 
         for (var key of this.iconsStr) {
             this.load.image(`icon-${key}`, `icons/${key}.png`)
@@ -59,7 +61,8 @@ export class Menu extends Phaser.Scene {
             this.width/2, this.height * 0.04, 50, 180, 360, true, 0x111812, 0.9
         )
         .setOrigin(0.5)
-        this.add.image(this.width * 0.05, this.statusBar.getLeftCenter().y, 'icon-health')
+        this.add.image(this.width * 0.1, this.statusBar.getLeftCenter().y, 'icon-health')
+        this.add.image(this.width * 0.25, this.statusBar.getLeftCenter().y, 'icon-coin')
         this.add.image(this.statusBar.getRightCenter().x - this.width * 0.05, this.statusBar.getRightCenter().y, 'icon-energy')
         this.add.text(
             this.width/2, this.statusBar.getCenter().y,
@@ -71,8 +74,13 @@ export class Menu extends Phaser.Scene {
         )
         .setOrigin(0.5)
         this.hp = this.add.text(
-            this.width * 0.05 + 32, this.statusBar.getCenter().y,
+            this.width * 0.1 + 32, this.statusBar.getCenter().y,
             "10"
+        )
+        .setOrigin(0.5)
+        this.gold = this.add.text(
+            this.width * 0.25 + 32, this.statusBar.getCenter().y,
+            "0"
         )
         .setOrigin(0.5)
         this.energy = this.add.text(
@@ -118,13 +126,13 @@ export class Menu extends Phaser.Scene {
                 this.scene.start(SCENES.ENDDAY)
             })
 
+        
         // Creating and aligning menu buttons
+        this.iconContainers = []
         for (var key of this.iconsStr) {
             const container = this.createAppButton(key)
-
             this.iconContainers.push(container)
         }
-        
         Phaser.Actions.GridAlign(this.iconContainers, {
             width: 4,
             height: 2,
@@ -159,6 +167,7 @@ export class Menu extends Phaser.Scene {
                 label.clearTint()
             })
             .on('pointerup', () => {
+                    
                     this.scene.start(key)
             })
         
@@ -175,5 +184,14 @@ export class Menu extends Phaser.Scene {
         this.day.setText(gameState!.day.toString())
         this.hp.setText(gameState!.hp.toString())
         this.energy.setText(gameState!.energy.toString())
+        this.gold.setText(gameState!.gold.toString())
+    }
+
+    shutdown() {
+        console.log("menu shutdown")
+        if (this.iconContainers) {
+            this.iconContainers.forEach(container => container.destroy());
+            this.iconContainers = [];
+        }
     }
 }

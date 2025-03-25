@@ -1,5 +1,7 @@
 import { Circle } from "phaser3-rex-plugins/plugins/gameobjects/shape/shapes/geoms";
 import { SCENES, STAGES } from "../../../constants/scenes.const";
+import { GameObjects } from "phaser";
+import { EventBus } from "../bootstrap/eventbus";
 
 export class Lesson extends Phaser.Scene {
     private width!: number;
@@ -8,6 +10,8 @@ export class Lesson extends Phaser.Scene {
     // Game objects
     private lessonsContainer!: Phaser.GameObjects.Container;
     private lessonsArr: Phaser.GameObjects.Text[] = []
+    private btnBack!: GameObjects.Image;
+    private btnBackIcon!: GameObjects.Image;
 
     constructor() {
         super(SCENES.LESSON)
@@ -21,6 +25,8 @@ export class Lesson extends Phaser.Scene {
     preload() {
         this.load.image('kade-background', '/phaser/kade_background.png')
         this.load.image('kade-icon', '/phaser/icons/kade.png')
+        this.load.image('btn-sq', '/phaser/misc/btn-square.png')
+        this.load.image('btn-back', '/phaser/icons/back.png')
     }
 
     create() {
@@ -34,9 +40,9 @@ export class Lesson extends Phaser.Scene {
         )
             .setOrigin(0)
 
-        this.add.circle(this.width * 0.1, 64, 35)
+        this.add.circle(this.width * 0.1 + 55, 64, 35)
             .setFillStyle(0xEAFDF8)
-        this.add.image(this.width * 0.1, 64, 'kade-icon')
+        this.add.image(this.width * 0.1 + 55, 64, 'kade-icon')
             .setScale(0.5)
         
         this.add.text(this.width / 2, 64 * 0.5, "Let's learn with Kade!", {
@@ -53,8 +59,8 @@ export class Lesson extends Phaser.Scene {
         })
             .setOrigin(0.5)
         
-
-        STAGES.forEach((lesson, i) => this.lessonsArr.push(this.createLessonButton(lesson, i)))
+        this.lessonsArr = []
+        STAGES.forEach((lesson, i) => this.lessonsArr.push(this.createLessonButton(lesson, i + 1)))
 
         Phaser.Actions.GridAlign(this.lessonsArr, {
             width: 1,
@@ -62,9 +68,25 @@ export class Lesson extends Phaser.Scene {
             cellWidth: (this.width * 0.8),
             cellHeight: this.height * 0.05,
             x: this.width * 0.2,
-            y: this.height * 0.1,
+            y: this.height * 0.13,
             
         })
+
+        this.btnBack = this.add.image(this.width * 0.95, 64 * 0.5, 'btn-sq')
+                .setInteractive({useHandCursor: true})
+                .on('pointerup', () => {
+                  this.scene.start(SCENES.MENU)
+                })
+                .on('pointerover', () => {
+                  this.btnBack.setTint(0xaaaaaa)
+                  this.btnBackIcon.setTint(0xaaaaaa)
+                })
+                .on('pointerout', () => {
+                  this.btnBack.clearTint()
+                  this.btnBackIcon.clearTint()
+                })
+        this.btnBackIcon = this.add.image(this.btnBack.getCenter().x, this.btnBack.getCenter().y, 'btn-back')
+                
 
         // this.scene.start(SCENES.EDITOR)
     }
@@ -74,7 +96,7 @@ export class Lesson extends Phaser.Scene {
             .setDepth(100)
         lesson.setInteractive({useHandCursor: true})
                 .on('pointerup', () => {
-                    this.scene.start(SCENES.EDITOR, {stage})
+                    this.scene.start(SCENES.EDITOR, {stage: stage})
                 })
                 .on('pointerover', () => {
                     lesson.setTint(0xaaaaaa)

@@ -1,9 +1,9 @@
 
 
 @if (type === 'icon') {
-    <div class="logout-icon" #logoutIcon>
-        <p-button icon="pi pi-sign-out" aria-label="logout" (click)="logout()" />
-    </div>
+    <p-button [link]="true" class="nav-item" (click)="logout()" pTooltip="Logout" tooltipPosition="right">
+        <i class="pi pi-sign-out"></i>
+      </p-button>
     
 } @else {
     <div class="logout-button" #logoutButton>

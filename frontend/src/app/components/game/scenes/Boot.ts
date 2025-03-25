@@ -51,9 +51,9 @@ export class Boot extends Phaser.Scene {
 
     // Start the appropriate scene based on the stage
     if (this.stage === 0) {
-        this.scene.start(SCENES.TUTORIAL);
+        this.scene.start(SCENES.ENDDAY);
     } else {
-        this.scene.start(SCENES.MENU);
+        this.scene.start(SCENES.BOTS);
     }
   }
 

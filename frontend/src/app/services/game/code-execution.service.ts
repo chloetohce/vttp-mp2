@@ -33,7 +33,7 @@ export class CodeExecutionService implements OnDestroy {
         error: v => {
           this.loading.next(false)
           console.log(v)
-          this.codeStdOut.next(v.message)
+          this.codeStdOut.next(v.error.message ?? "Something went wrong...")
         }
       })
   }

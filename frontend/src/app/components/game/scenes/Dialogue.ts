@@ -91,6 +91,11 @@ export class Dialogue extends Phaser.Scene {
         )
         .setScale(7)
         .setOrigin(0.5, 1)
+
+        if (this.speaker == 'note') {
+            this.portrait.setScale(3)
+        }
+
         this.choicesContainer.add(this.portrait)
         this.anims.create({
             key: 'idle',

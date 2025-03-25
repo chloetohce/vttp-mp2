@@ -44,6 +44,7 @@ export class SignupComponent implements OnInit {
           }
         }
       })
+    this.loading = false;
   }
 
   protected resetFieldDbErrorMessage(field: string) {

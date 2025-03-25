@@ -1,0 +1,32 @@
+{
+    "start": {
+        "speaker": "Note",
+        "type": "text",
+        "text": "Note to self:",
+        "next": "class"
+    },
+    "class": {
+        "speaker": "Note",
+        "text": "The class needs to be named 'Bot' for the code to work. The system won't be able to read it otherwise. ",
+        "next": "main"
+    },
+    "main": {
+        "speaker": "Note",
+        "text": "Each bot needs to have a mine() function, with the method signature being: `public int mine(int[][] resources)`.",
+        "next": "input"
+    },
+    "input": {
+        "speaker": "Note",
+        "text": "Resources input is an array of integer arrays, with gold being demarcated by '1'. ",
+        "next": "output"
+    }, 
+    "output": {
+        "speaker":"Note",
+        "text": "After mining, bot should return the number of gold found.",
+        "next": "end"
+    },
+    "end": {
+        "speaker":"Note",
+        "text": "Side note: main entrypoint handled by system. Do not include here."
+    }
+}

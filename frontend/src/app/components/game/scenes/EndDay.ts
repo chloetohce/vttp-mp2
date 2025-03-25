@@ -4,6 +4,8 @@ import { GameStateService } from "../../../services/game/game-state.service";
 import { AppState } from "../../../store/app.store";
 import { endDay } from "../../../store/player/player.action";
 import { Store } from "@ngrx/store";
+import { GameObjects, Time } from "phaser";
+import Menu from "phaser3-rex-plugins/templates/ui/menu/Menu";
 
 export class EndDay extends Phaser.Scene {
     private width!: number;
@@ -16,8 +18,9 @@ export class EndDay extends Phaser.Scene {
 
     // Scene Objects
     private loadingText!: Phaser.GameObjects.Text;
-    private loadingGraphics!: Phaser.GameObjects.Graphics;
+    private updateTimer!: Time.TimerEvent
     private isLoading: boolean = false;
+    private btnNext!: GameObjects.Image;
 
     constructor() {
         super(SCENES.ENDDAY)
@@ -34,29 +37,35 @@ export class EndDay extends Phaser.Scene {
 
     preload() {
         // this.store.dispatch(endDay())
-        
-        
+        this.load.image('btn-play', '/phaser/icons/play.png')
+        this.load.image('banner', '/phaser/bg/banner.png')
+        this.load.image('panel', '/phaser/bg/panel.png')
+        this.load.image('btn', '/phaser/misc/grey-btn.png')
     }
 
     create() {
+        this.add.rectangle(0,0, this.width, this.height, 0x121212)
+            .setOrigin(0)
+        
         // Create loading text
         this.loadingText = this.add.text(
             this.width / 2, 
             this.height / 2, 
-            'Loading...', 
+            'Calculating', 
             { 
                 font: '24px Arial',
                 color: '#ffffff'
             }
         ).setOrigin(0.5);
         
-        // Create loading spinner/progress bar
-        this.loadingGraphics = this.add.graphics();
-        this.loadingGraphics.fillStyle(0xffffff, 1);
-        
-        // Initially hide loading elements
         this.loadingText.setVisible(false);
-        this.loadingGraphics.setVisible(false);
+
+        this.updateTimer= this.time.addEvent({
+            delay: 400,
+            callback: this.updateLoadingText,
+            callbackScope: this,
+            loop: true
+        })
         
         // Start the data fetching process
         this.fetchNextDayData();
@@ -65,45 +74,38 @@ export class EndDay extends Phaser.Scene {
     private showLoading() {
         this.isLoading = true;
         this.loadingText.setVisible(true);
-        this.loadingGraphics.setVisible(true);
         
-        // Add animation for loading spinner
-        this.tweens.add({
-            targets: this.loadingGraphics,
-            rotation: { from: 0, to: Math.PI * 2 },
-            duration: 1000,
-            repeat: -1,
-            onUpdate: () => {
-                this.loadingGraphics.clear();
-                this.loadingGraphics.fillStyle(0xffffff, 1);
-                this.loadingGraphics.fillCircle(this.width / 2, this.height / 2 + 40, 8);
-                this.loadingGraphics.fillCircle(this.width / 2 + 15, this.height / 2 + 30, 8);
-                this.loadingGraphics.fillCircle(this.width / 2 + 15, this.height / 2 + 50, 8);
-            }
-        });
+    }
+
+    updateLoadingText() {
+        const dots = this.loadingText.text.replace("Calculating", "").length
+        let add = ''
+        if (dots < 3) {
+            add += '.'.repeat(dots + 1)
+        }
+        this.loadingText.setText(`Calculating${add}`)
     }
     
     private hideLoading() {
         this.isLoading = false;
         this.loadingText.setVisible(false);
-        this.loadingGraphics.setVisible(false);
-        this.tweens.killTweensOf(this.loadingGraphics);
+        this.updateTimer.remove()
     }
     
     private async fetchNextDayData() {
+        console.log("fetching data")
         // Show loading UI
         this.showLoading();
-        
+    
         try {
             // Fetch data
             this.results = await firstValueFrom(this.svc
                 .startNextDay(this.username)
                 .pipe(
-                    filter(v => v != undefined && v != null),
+                    tap(v => console.log(v)),
                     take(1)
                 )
             );
-            
             console.log(this.results);
             
             // Hide loading UI
@@ -115,22 +117,31 @@ export class EndDay extends Phaser.Scene {
         } catch (error) {
             console.error('Error fetching next day data:', error);
             
-            // Hide loading UI and show error
             this.hideLoading();
             this.showError('Failed to load data. Please try again.');
         }
     }
     
     private displayResults() {
-        // Implement your results display logic here
-        // For example:
+        const banner = this.add.image(
+            this.width/2, 115, 'banner'
+        )
+
+        const panel = this.add.nineslice(
+            (this.width + 50) / 2, banner.getBottomCenter().y + 40,
+            'panel', 0, 
+            this.width * 0.8 - 50, this.height * 0.5,
+            20,20,20,20
+        )
+        .setOrigin(0.5, 0)
+
         const resultsTitle = this.add.text(
             this.width / 2,
             100,
-            'Day Results',
+            'Bot Output',
             {
-                font: '32px Arial',
-                color: '#ffffff'
+                font: '32px',
+                color: '#dfe0f2'
             }
         ).setOrigin(0.5);
         
@@ -138,16 +149,36 @@ export class EndDay extends Phaser.Scene {
         if (this.results && this.results.length > 0) {
             this.results.forEach((result, index) => {
                 this.add.text(
-                    this.width / 2,
-                    180 + (index * 40),
-                    `${result.name}: ${result.output}`,
+                    (this.width + 50) / 2,
+                    panel.getTopCenter().y + 30 + (index * 40),
+                    `${result.name}:         ${result.output}`,
                     {
-                        font: '18px Arial',
-                        color: '#ffffff'
+                        font: '16px',
+                        color: '#dfe0f2'
                     }
                 ).setOrigin(0.5);
             });
         }
+        this.displayMenuButton()
+    }
+
+    private displayMenuButton() {
+        
+        this.btnNext = this.add.image(this.width/2, this.height * 0.8, 'btn')
+        const play = this.add.image(this.width/2, this.height * 0.8, 'btn-play')
+        this.btnNext.setScale(2)
+        this.btnNext.setInteractive({useHandCursor: true})
+        .on('pointerover', () => {
+            this.btnNext.setTint(0xaaaaaa)
+            play.setTint(0xaaaaaa)
+        })
+        .on('pointerout', () => {
+            this.btnNext.clearTint()
+            play.clearTint()
+        })
+        .on('pointerup', () => {
+            this.scene.start(SCENES.MENU)
+        })
     }
     
     private showError(message: string) {
@@ -160,10 +191,10 @@ export class EndDay extends Phaser.Scene {
                 color: '#ff0000'
             }
         ).setOrigin(0.5);
+        this.displayMenuButton()
     }
     
     override update() {
-        // Update logic if needed
     }
 
 }

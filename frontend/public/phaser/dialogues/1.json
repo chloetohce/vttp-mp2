@@ -1,0 +1,27 @@
+{
+    "start": {
+        "speaker": "Kade",
+        "type": "text",
+        "text": "Heya! Welcome to the basics of Java. We're going to start with printing out strings! Here's how",
+        "next": "class"
+    },
+    "class": {
+        "speaker": "Kade",
+        "text": "So, the basic building block of a Java program is the humble class, which has the structure of 'public class Main {}'.",
+        "next": "main"
+    },
+    "main": {
+        "speaker": "Kade",
+        "text": "However, to get the Java compiler to run we will need to have an entrypoint, generally indicated by 'public static void main(String[] args) {...}'.",
+        "next": "print"
+    },
+    "print": {
+        "speaker": "Kade",
+        "text": "Of course, it won't produce anything if we don't actually have any code inside the code brackets. Try printing something out, using 'System.out.println(...)'.",
+        "next": "end"
+    }, 
+    "end": {
+        "speaker":"Kade",
+        "text": "Happy coding!"
+    }
+}

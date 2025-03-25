@@ -13,8 +13,10 @@ export class EditBot extends Phaser.Scene {
     private codeService!: CodeExecutionService
     private store!: Store<AppState>
 
-    private btnRunCode!: Phaser.GameObjects.Text;
-    private btnBack!: Phaser.GameObjects.Text;
+    private btnRunText!: Phaser.GameObjects.Text;
+  private btnRun!: Phaser.GameObjects.Image;
+  private btnBackIcon!: Phaser.GameObjects.Image;
+  private btnBack!: Phaser.GameObjects.Image;
 
 
     constructor() {
@@ -33,33 +35,53 @@ export class EditBot extends Phaser.Scene {
         // Load any assets needed for the edit scene
         // this.load.image('btn-save', '/phaser/bots/save.png');
         // this.load.image('btn-back', '/phaser/bots/back.png');
+        this.load.image('btn-red', '/phaser/misc/red-btn.png')
+    this.load.image('btn-sq', '/phaser/misc/btn-square.png')
+    this.load.image('btn-back', '/phaser/icons/back.png')
     }
 
     create() {
         
         EventBus.emit('editor-bot-active', true, this.bot.code);
         console.log(this.bot.code)
-        // Display the bot's current details
-        this.add
-            .text(this.width *0.9, this.height * 0.1, 'EDIT BOT', {
-                fontFamily: 'Arial',
-                fontSize: '24px',
-                color: '#ffffff',
-                align: 'center',
-            })
-            .setOrigin(0.5);
-
-        // Bot name input
-        this.btnRunCode = this.add.text(10, this.height * 0.8, 'Save Code', {
-                backgroundColor: '#4a4a4a',
-                padding: {x: 10, y: 5},
-                color: '#ffffff'
-            }).setInteractive({useHandCursor: true})
-                .on('pointerup', () => {
-                    this.saveBotChanges(this.bot)
-                })
-
+        this.scene.launch(SCENES.DIALOGUE, {key: this.bot.type, speaker: 'note'})
         
+        // Display the bot's current details
+
+        this.btnRun = this.add.image(55 + this.width * 0.3, this.height * 0.79, 'btn-red')
+      .setOrigin(0)
+      .setInteractive({useHandCursor: true})
+        .on('pointerup', () => {
+            this.saveBotChanges(this.bot)
+        })
+        .on('pointerover', () => {
+          this.btnRun.setTint(0xaaaaaa)
+        })
+        .on('pointerout', () => {
+          this.btnRun.clearTint()
+        })
+    this.btnRunText = this.add.text(this.btnRun.getCenter().x, 
+        this.btnRun.getCenter().y + 1, 'Save')
+        .setOrigin(0.5)
+
+    this.btnBack = this.add.image(55, this.height * 0.79, 'btn-sq')
+        .setOrigin(0)
+        .setInteractive({useHandCursor: true})
+        .on('pointerup', () => {
+          this.scene.start(SCENES.LESSON)
+          this.scene.stop(SCENES.DIALOGUE)
+          EventBus.emit('editor-scene-active', false)
+        })
+        .on('pointerover', () => {
+          this.btnBack.setTint(0xaaaaaa)
+          this.btnBackIcon.setTint(0xaaaaaa)
+        })
+        .on('pointerout', () => {
+          this.btnBack.clearTint()
+          this.btnBackIcon.clearTint()
+        })
+        this.btnBackIcon = this.add.image(this.btnBack.getCenter().x, this.btnBack.getCenter().y, 'btn-back')
+    
        
     }
 

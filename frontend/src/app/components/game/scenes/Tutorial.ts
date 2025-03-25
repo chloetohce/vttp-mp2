@@ -42,17 +42,12 @@ export class Tutorial extends Phaser.Scene {
         //     centerY: 'center'
         // })
 
-        this.scale.on('resize', (gameSize: any) => {
-            let w = gameSize.width;
-            let h = gameSize.height;
-            border.setSize(w, h);
-        });
-
         let dialogue = this.scene.launch(SCENES.DIALOGUE, {key: 'tutorial', speaker: 'embra'})
 
         EventBus.on('dialogue-end', () => {
+            console.log('dialogue end')
             this.store.dispatch(increaseStage({currStage: 0}))
-            this.store.dispatch(endDay())
+            // this.store.dispatch(endDay())
             this.scene.stop(SCENES.DIALOGUE)
             this.scene.start(SCENES.ENDDAY)
         })

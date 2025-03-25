@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     event.preventDefault()
     const loginInfo: User = this.form.value;
     this.authService.login(loginInfo)
+    this.loading = false;
 
   }
 
