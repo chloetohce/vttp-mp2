@@ -16,25 +16,30 @@ export class SignupComponent implements OnInit {
   form!: FormGroup
   errUsername!: string | null
   errEmail!: string | null
+  loading = false;
 
   ngOnInit(): void {
       this.form = this.createForm();
   }
   
   processSignup(event: Event) {
+    this.loading = true
     event.preventDefault()
     const newUser: User = {
       ...this.form.value
     }
     this.authService.signup(newUser)
       .subscribe({
-        next:() => {},
+        next:() => {this.loading=false},
         error: (err) => {
+          this.loading = false
           if (err.username) {
+            this.form.controls['username'].setErrors({'db': true})
             this.errUsername = err.username;
           }
 
           if (err.email) {
+            this.form.controls['email'].setErrors({'db': true})
             this.errEmail = err.email;
           }
         }

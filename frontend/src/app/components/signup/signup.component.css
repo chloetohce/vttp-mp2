@@ -1,0 +1,111 @@
+/* ::ng-deep.p-button {
+    width: 100vw;
+} */
+
+::ng-deep.test {
+    width: 100svi;
+}
+
+.small {
+    font-size: smaller;
+}
+
+.sign-in-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--p-surface-950);
+    padding: 2rem;
+  }
+  
+  /* Card styles */
+  :host ::ng-deep .sign-in-card {
+    min-width: 400px;
+    max-width: 400px;
+    border-radius: 1rem;
+    padding: 30px;
+    box-shadow: 0 4px 10px var(--p-secondary-900);
+  }
+  
+  :host ::ng-deep .sign-in-card .p-card-header {
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+  }
+  
+  :host ::ng-deep .sign-in-card .p-card-content {
+    padding-top: 1.5rem;
+  }
+  
+  /* Header styles */
+  :host ::ng-deep .header {
+    text-align: center;
+    padding: 0 1rem;
+    color: var(--p-secondary-400);
+  }
+  
+  :host ::ng-deep .header h1 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  :host ::ng-deep .header p {
+    margin-top: 0;
+    color: var(--text-color-secondary);
+  }
+  
+  /* Form field styles */
+  :host ::ng-deep .field {
+    margin-bottom: 1.5rem;
+  }
+  
+  :host ::ng-deep .field label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  :host ::ng-deep .p-inputtext {
+    padding-left: 2.5rem;
+    width: 100%;
+  }
+
+  
+  /* Link styles */
+  :host ::ng-deep .sign-up-link {
+    color: var(--p-secondary-400);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  :host ::ng-deep .sign-up-link:hover {
+    text-decoration: underline;
+    color: var(--p-secondary-600);
+  }
+
+  
+  /* Button styles */
+  :host ::ng-deep .p-button {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    height: 3rem;
+    width: 100%;
+  }
+  
+  /* Divider styles */
+  :host ::ng-deep .p-divider {
+    margin: 1.5rem 0;
+  }
+  
+  :host ::ng-deep .p-divider .p-divider-content {
+    background-color: var(--surface-card);
+  }
+  
+  /* Messages styles */
+  :host ::ng-deep .p-message {
+    margin-top: 1.5rem;
+  }
+
+  .p-error {
+    color: rgb(254, 99, 99);
+  }

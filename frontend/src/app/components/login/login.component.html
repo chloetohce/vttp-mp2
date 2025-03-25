@@ -54,15 +54,11 @@
           <span class="text-600">OR</span>
         </p-divider>
   
-        <div class="text-center">
+        <div class="text-center small">
           <span>Don't have an account? </span>
-          <a href="#" class="sign-up-link">Sign up</a>
+          <a href="/signup" class="sign-up-link">Sign up</a>
         </div>
       </form>
   
     </p-card>
   </div>
-
-<div *ngIf="errorMsg$ | async as errorMsg">
-    <p>{{errorMsg}}</p>
-</div>

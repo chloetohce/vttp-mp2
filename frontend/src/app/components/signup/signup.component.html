@@ -1,36 +1,88 @@
-<form [formGroup]="form" (submit)="processSignup($event)">
-    <p-floatlabel variant="on">
-        <input pInputText id="username" formControlName="username" pSize="small" 
-            variant="filled" (input)="resetFieldDbErrorMessage('username')">
-        <label for="username">Username</label>
-    </p-floatlabel>
-    <p-message severity="error" variant="simple" size="small">{{errUsername}}</p-message>
-    <p-message severity="error" variant="simple" size="small" 
-        [hidden]="isFieldValid('username')">Username is required and must be at least 4 characters.
-    </p-message>
+<!-- sign-in.component.html -->
+<div class="sign-in-container">
+    <p-card styleClass="sign-in-card">
+      <ng-template pTemplate="header">
+        <div class="header">
+          <h1>Sign Up</h1>
+        </div>
+        <p>Welcome! We're happy to see you.</p>
 
+      </ng-template>
+      
+  
+      <form [formGroup]="form" (ngSubmit)="processSignup($event)">
+        <div class="field">
+          <span class="p-input-icon-left w-full">
+            <p-floatlabel variant="on">
+                <p-iconfield>
+                    <p-inputicon class="pi pi-user" />
+                    <input pInputText id="username" formControlName="username" pSize="large" variant="filled" />
+                </p-iconfield>
+                <label for="on_label">Username</label>
+            </p-floatlabel>
+            <small [hidden]="isFieldValid('username')" class="p-error">
+                <span *ngIf="form.get('username')?.errors?.['required']">Email is required</span>
+                    <span *ngIf="form.get('username')?.errors?.['minlength']">Password must be at least 4 characters</span>
+                <span *ngIf="errUsername">{{errUsername}}</span>
 
-    <p-floatlabel variant="on">
-        <input pInputText id="email" formControlName="email" pSize="small" 
-            variant="filled" (input)="resetFieldDbErrorMessage('email')">
-        <label for="email">Email</label>
-    </p-floatlabel>
-    <p-message severity="error" variant="simple" size="small">{{errEmail}}</p-message>
-    <p-message severity="error" variant="simple" size="small" 
-        [hidden]="isFieldValid('email')">Provide a valid email.
-    </p-message>
-    
-    
-    <p-floatlabel variant="on">
-        <p-password id="password" formControlName="password" [toggleMask]="true" size="small" variant="filled" [feedback]="false"></p-password>
-        <label for="password">Password</label>
-    </p-floatlabel>
-    <p-message severity="error" variant="simple" size="small" 
-        [hidden]="isFieldValid('password')">Password needs to be at least 6 characters.
-    </p-message>
+            </small>
+          </span>
+        </div>
 
+        <div class="field">
+            <span class="p-input-icon-left w-full">
+              <p-floatlabel variant="on">
+                  <p-iconfield>
+                      <p-inputicon class="pi pi-at" />
+                      <input pInputText id="email" formControlName="email" pSize="large" variant="filled" />
+                  </p-iconfield>
+                  <label for="on_label">Email</label>
+              </p-floatlabel>
+            </span>
+            <small [hidden]="isFieldValid('email')" class="p-error">
+                <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
+                <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email address</span>
+                <span *ngIf="errEmail">{{errEmail}}</span>
+            </small>
+          </div>
+  
+        <div class="field">
+          <span class="p-input-icon-left w-full">
+            <span class="p-input-icon-left w-full">
+                <p-floatlabel variant="on">
+                    <p-iconfield>
+                        <p-inputicon class="pi pi-lock" />
+                        <input pInputText id="password" formControlName="password" 
+                            type="password" pSize="large" variant="filled" />
+                    </p-iconfield>
+                    <label for="password">Password</label>
+                </p-floatlabel>
+                <small [hidden]="isFieldValid('password')" class="p-error">
+                    <span *ngIf="form.get('password')?.errors?.['required']">Password is required</span>
+                    <span *ngIf="form.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+                </small>
+              </span>
+          </span>
+        </div>
+  
+        <p-button 
+          type="submit" 
+          label="Sign Up" 
+          styleClass="w-full mb-3" 
+          [loading]="loading"
+          [disabled]="form.invalid"
+        ></p-button>
 
-    <p-button type="submit" label="Submit" [disabled]="form.invalid"/>
-    
-    <!-- Implement loading here in case server is slow?-->
-</form>
+        
+        <p-divider align="center">
+          <span class="text-600">OR</span>
+        </p-divider>
+  
+        <div class="text-center small">
+          <span>Already have an account? </span>
+          <a href="/login" class="sign-up-link">Login</a>
+        </div>
+      </form>
+  
+    </p-card>
+  </div>

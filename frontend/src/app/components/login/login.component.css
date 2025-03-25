@@ -6,6 +6,10 @@
     width: 100svi;
 }
 
+.small {
+    font-size: smaller;
+}
+
 .sign-in-container {
     display: flex;
     justify-content: center;
