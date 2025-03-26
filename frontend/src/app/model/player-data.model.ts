@@ -24,3 +24,12 @@ export interface Item {
     desc: string,
     effect: GameAction
 }
+
+export interface MapLocation {
+    name: string, 
+    x: number,
+    y: number,
+    npc: string,
+    desc: string,
+    key: string
+}

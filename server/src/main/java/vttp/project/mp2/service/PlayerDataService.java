@@ -64,7 +64,6 @@ public class PlayerDataService {
 
     public JsonArray runNextDay(String username) throws InterruptedException, ExecutionException {
         PlayerData old = getPlayerData(username);
-        System.out.println("RUNNING NEXT DAY: " + old.toString());
         JsonArrayBuilder result = Json.createArrayBuilder();
         int toAdd = 0;
         for (Bot b : old.getBots()) {
@@ -76,7 +75,6 @@ public class PlayerDataService {
                 .build()
             );
         }
-        System.out.println(toAdd);
         old.setGold(old.getGold() + toAdd);
 
         old.setEnergy((int)(10 * (0.2 + 0.8 * (old.getHp() / 10))));

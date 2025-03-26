@@ -1,0 +1,63 @@
+{
+    "start": {
+      "id": "start",
+      "text": "Hey. That implant of yours still working all right? No side effects? Other than the obvious, obviously.",
+      "next": "treatment"
+    },
+    "treatment": {
+      "id": "treatment",
+      "text": "You're here for the injector, I presume. That'll cost 25 gold, kid.",
+      "choices": [
+        {
+          "text": "That's a rip off, and you know it.",
+          "next": "complain"
+        },
+        {
+          "text": "Purchase injector (gain 6HP, cost 25G)",
+          "next": "end",
+          "condition": {
+            "key": "GOLD",
+            "payload": 25
+          },
+          "effect": [
+            {
+              "type": "CHANGE_HP",
+              "payload": 6
+            }
+          ]
+        },
+        {
+          "text": "Leave",
+          "next": "end"
+        }
+      ]
+    },
+    "complain": {
+      "id": "complain",
+      "text": "Complain all you want, kid. You're free to look elsewhere. You buyin' or what?",
+      "choices": [
+        {
+          "text": "Purchase injector (+6HP, -25G)",
+          "next": "end",
+          "condition": {
+            "key": "GOLD",
+            "payload": 25
+          },
+          "effect": [
+            {
+              "type": "CHANGE_HP",
+              "payload": 6
+            }
+          ]
+        },
+        {
+          "text": "Leave",
+          "next": "end"
+        }
+      ]
+    },
+    "end": {
+      "id": "end",
+      "text": "See ya 'round. "
+    }
+  }

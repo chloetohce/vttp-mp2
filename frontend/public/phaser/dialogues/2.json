@@ -1,0 +1,27 @@
+{
+    "start": {
+        "speaker": "Kade",
+        "type": "text",
+        "text": "Welcome back! Let's discuss what arrays are today.",
+        "next": "intro"
+    },
+    "intro": {
+        "speaker": "Kade",
+        "text": "Arrays are a nice quick way to store a bunch of data together. This makes it easier to store and retrieve data, instead of relying on a variable for each value.",
+        "next": "type"
+    },
+    "type": {
+        "speaker": "Kade",
+        "text": "Arrays, however, can only store one type of data. I'll show you how to loop through variables in the next video!",
+        "next": "assignment"
+    },
+    "assignment": {
+        "speaker": "Kade",
+        "text": "You can initialise arrays using { }, for instance: double[] prices = {13.1, 15.87, 14.22, 16.66};",
+        "next": "retrieve"
+    }, 
+    "retrieve": {
+        "speaker":"Kade",
+        "text": "You can also access variables in an array by placing the index in [ ] brackets, like prices[1]. Remember, indices start from 1 here."
+    }
+}

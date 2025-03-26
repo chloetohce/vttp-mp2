@@ -47,3 +47,17 @@ export const restart = createAction(
     '[Game] Restart',
     props<{username: string}>()
 )
+
+export const changeGold = createAction(
+    '[Game] Change Gold',
+    props<{payload: number}>()
+)
+
+export const changeEnergy = createAction(
+    '[Game] Change Energy',
+    props<{payload: number}>()
+)
+export const changeHp = createAction(
+    '[Game] Change HP',
+    props<{payload: number}>()
+)

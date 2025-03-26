@@ -13,7 +13,6 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = localStorage.getItem('token');
 
     if (!req.url.includes("/auth/")) {
-      console.info(`Adding bearer token ${token}`)
       const authReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,

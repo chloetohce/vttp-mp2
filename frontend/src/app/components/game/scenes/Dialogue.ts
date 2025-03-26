@@ -4,6 +4,7 @@ import { DialogueManager } from "../../../services/game/dialogue.manager";
 import { DialogueNode } from "../../../model/dialogue.model";
 import { SCENES } from "../../../constants/scenes.const";
 import { ActionMapperService } from "../../../services/game/action-mapper.service";
+import { EventBus } from "../bootstrap/eventbus";
 
 export class Dialogue extends Phaser.Scene {
     // constants
@@ -25,7 +26,7 @@ export class Dialogue extends Phaser.Scene {
     private dialogueContainer!: GameObjects.Container;
     private choicesContainer!: GameObjects.Container;
     private portrait!: GameObjects.Sprite;
-    private currDialogue!: GameObjects.Text;
+    private currDialogue!: GameObjects.Text | undefined;
     private choicesList: GameObjects.Text[] = [];
 
     private currentNodeSub!: Subscription;
@@ -50,12 +51,13 @@ export class Dialogue extends Phaser.Scene {
         this.load.setPath('/phaser')
         this.load.json(`dialogue-${this.dataKey}`, `dialogues/${this.dataKey}.json`)
         // this.load.image('chara', `npc/${this.speaker}.png`)
-        this.load.spritesheet('chara', `npc/${this.speaker}.png`,
+        this.load.spritesheet(`chara-${this.speaker}`, `npc/${this.speaker}.png`,
             {frameWidth: 48, frameHeight: 48}
         )
     }
     
     create() {
+        console.log(`LAUNCHING DIALOGUE WITH ${this.speaker}: ${this.dataKey}.json`)
         // Init dialogue manager
         this.dialogueManager = new DialogueManager(
             this.cache.json.get(`dialogue-${this.dataKey}`) as Record<string, DialogueNode>,
@@ -87,7 +89,7 @@ export class Dialogue extends Phaser.Scene {
         // TODO: Modify scaling and positioning based on game sprites
         this.portrait = this.add.sprite(
             50, this.height - this.choicesY,
-            'chara'
+            `chara-${this.speaker}`
         )
         .setScale(7)
         .setOrigin(0.5, 1)
@@ -98,15 +100,15 @@ export class Dialogue extends Phaser.Scene {
 
         this.choicesContainer.add(this.portrait)
         this.anims.create({
-            key: 'idle',
-            frames: this.anims.generateFrameNames('chara', {
+            key: `idle-${this.speaker}`,
+            frames: this.anims.generateFrameNames(`chara-${this.speaker}`, {
                 start: 0,
                 end: 3
             }),
             frameRate: 2,
             repeat: -1
         })
-        this.portrait.play('idle')
+        this.portrait.play(`idle-${this.speaker}`)
         
         // Preparing dialogue
         this.currentNodeSub = this.dialogueManager.currentNode$.subscribe(n => {
@@ -126,11 +128,17 @@ export class Dialogue extends Phaser.Scene {
         })
     }
 
+    override update(time: number, delta: number): void {
+        EventBus.on('dialogue-end-close', () => {
+            this.currDialogue = undefined
+        })
+    }
+
     private startDialogue() {
         this.dialogueManager.start();
     }
 
-    private advanceDialogue(choiceIndex?: number) {
+    private advanceDialogue(choiceIndex?: string) {
         this.choicesList.forEach(c => this.choicesContainer.remove(c, true))
         this.dialogueManager.next(choiceIndex);
     }
@@ -155,8 +163,8 @@ export class Dialogue extends Phaser.Scene {
             x, y + yOffset,
             this.replacePlaceholders(node.text, this.variables),
             {
-                fontFamily: 'Arial',
-                fontSize: '14px',
+                fontFamily: 'vcr',
+                fontSize: '16px',
                 color: '#ffffff',
                 padding: {x: 5, y: 5},
                 resolution: 0,
@@ -180,7 +188,8 @@ export class Dialogue extends Phaser.Scene {
               yOffset,
               choice.text,
               {
-                fontSize: '14px',
+                fontFamily: 'vcr',
+                fontSize: '16px',
                 color: '#ffffff',
                 padding: { x: 5, y: 5 },
                 resolution: 3,
@@ -200,7 +209,7 @@ export class Dialogue extends Phaser.Scene {
                         next: choice.next
                     }
                     this.displayDialogueText(playerResponse, this.chatWidth, 5, true)
-                    this.advanceDialogue(i)
+                    this.advanceDialogue(choice.text)
                 })
                 .on('pointerover', () => {
                     choiceText.setBackgroundColor('#44444444')

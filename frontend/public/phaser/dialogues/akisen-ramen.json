@@ -1,0 +1,70 @@
+{
+    "start": {
+        "id": "start",
+        "text": "Ramen's 10 gold a bowl. Unless you wanna work here, if you have the energy. Pay's 10 gold.",
+        "next": "question"
+    },
+    "question": {
+        "id": "question",
+        "text": "Whaddya say?",
+        "choices": [
+            {
+                "text": "Work here (gain 10G, cost 4E)",
+                "next": "work",
+                "condition": {
+                    "key": "ENERGY",
+                    "payload": 4
+                },
+                "effect": [
+                    {
+                        "type": "CHANGE_GOLD",
+                        "payload": 10
+                    },
+                    {
+                        "type": "CHANGE_ENERGY",
+                        "payload": -4
+                    }
+                ]
+            },
+            {
+                "text": "Eat ramen (gain 2HP, cost 10G)",
+                "next": "eat",
+                "condition": {
+                    "key": "GOLD",
+                    "payload": 10
+                },
+                "effect": [
+                    {
+                        "type": "CHANGE_HP",
+                        "payload": 2
+                    },
+                    {
+                        "type": "CHANGE_GOLD",
+                        "payload": -10
+                    }
+                ]
+            },
+            {
+                "text": "Leave",
+                "next": "end"
+            }
+        ]
+    },
+    "work": {
+        "id": "work",
+        "text": "Great to have you on board.",
+        "next": "again"
+    },
+    "eat": {
+        "text": "Great to finally have a customer.",
+        "next": "again"
+    },
+    "again": {
+        "text": "You can still get a bowl of ramen or work a shift...",
+        "next": "question"
+    },
+    "end": {
+        "id": "end",
+        "text": "See ya 'round. "
+    }
+}

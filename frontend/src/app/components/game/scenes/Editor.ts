@@ -61,6 +61,7 @@ export class Editor extends Phaser.Scene {
           this.scene.start(SCENES.LESSON)
           this.scene.stop(SCENES.DIALOGUE)
           EventBus.emit('editor-scene-active', false)
+          EventBus.emit('dialogue-end-close')
         })
         .on('pointerover', () => {
           this.btnBack.setTint(0xaaaaaa)

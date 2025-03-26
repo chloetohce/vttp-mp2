@@ -55,7 +55,6 @@ export class AuthService {
       .post<AuthResponse>('/auth/login', login)
       .subscribe({
         next: (response) => {
-          console.log('Login response:', response);
           const token = response.token;
           const refreshToken = response.refreshToken;
           this.store.dispatch(setToken({ token: token }));

@@ -226,11 +226,9 @@ public class CodeExecutionService {
     }
 
     private void deleteFolder(File folder) {
-        System.out.println("deleting");
         File[] files = folder.listFiles();
         if (files != null) {
             for (File f : files) {
-                System.out.println(f);
                 if (f.isDirectory())
                     deleteFolder(f);
                 else

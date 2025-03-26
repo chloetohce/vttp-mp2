@@ -1,9 +1,7 @@
 import { createReducer, createSelector, on } from "@ngrx/store"
-import { endDay, gainBot, getInjector, getPlayerData, getPlayerDataFailure, increaseStage, restart, setPlayerData, updateBotCode } from "./player.action"
+import { changeEnergy, changeGold, changeHp, endDay, gainBot, getInjector, getPlayerData, getPlayerDataFailure, increaseStage, restart, setPlayerData, updateBotCode } from "./player.action"
 import { Bot, Item, PlayerData } from "../../model/player-data.model"
 import { ITEMS } from "../../constants/items.const"
-import { inject, INJECTOR } from "@angular/core"
-import { PlayerService } from "../../services/player.service"
 
 
 export interface PlayerState {
@@ -80,6 +78,18 @@ export const playerReducer = createReducer(
     on(restart, (state, {username}) => ({
         ...PLAYER_INIT,
         username: username
+    })),
+    on(changeGold, (state, {payload}) => ({
+        ...state,
+        gold: state.gold + payload
+    })),
+    on(changeEnergy, (state, {payload}) => ({
+        ...state,
+        energy: Math.min(state.energy + payload, 10)
+    })),
+    on(changeHp, (state, {payload}) => ({
+        ...state,
+        hp: Math.min(state.hp + payload, 10)
     }))
 )
 
@@ -110,4 +120,14 @@ export const selectPlayerData = createSelector(
 export const selectHp = createSelector(
     selectPlayerState,
     (state: PlayerState) => state.hp
+)
+
+export const selectGold = createSelector(
+    selectPlayerState,
+    (state: PlayerState) => state.gold
+)
+
+export const selectEnergy = createSelector(
+    selectPlayerState,
+    (state: PlayerState) => state.energy
 )

@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   inject,
+  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -26,6 +27,10 @@ export class EditorComponent implements OnInit {
   protected isActive: boolean = false;
   editor!: monaco.editor.IStandaloneCodeEditor;
   @ViewChild('editorElement', { static: true }) editorElementRef!: ElementRef;
+
+  @Input() code!: String;
+
+
   protected editorOptions: monaco.editor.IStandaloneEditorConstructionOptions =
     {
       theme: 'vs-dark',
@@ -42,7 +47,6 @@ export class EditorComponent implements OnInit {
         this.isActive = isActive;
       })
       .on('editor-execute-code', (stage: number) => {
-        console.log(stage)
         this.executeCode(stage)
       })
       .on('editor-bot-active', (isActive: boolean) => {
@@ -65,7 +69,6 @@ export class EditorComponent implements OnInit {
   }
 
   private executeCode(stage: number) {
-    console.log(this.editor.getValue())
     this.service.sendCodeToServer(this.editor.getValue(), stage)
   }
 }

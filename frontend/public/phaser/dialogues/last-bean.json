@@ -1,0 +1,33 @@
+{
+    "start": {
+      "id": "start",
+      "text": "Welcome to The Last Bean! May I take your order?",
+      "choices": [
+        {
+          "text": "One large coffee (gain 2E, cost 7G)",
+          "next": "end",
+          "condition": {
+            "key": "GOLD",
+            "payload": 7
+          },
+          "effect": [
+            {
+              "type": "CHANGE_ENERGY",
+              "payload": 2
+            },
+            {
+                "type": "CHANGE_GOLD",
+                "payload": -7
+            }
+          ]
+        },
+        {
+          "text": "Leave",
+          "next": "end"
+        }
+      ]
+    },
+    "end" :{
+        "text": "Have a great day!"
+    }
+}

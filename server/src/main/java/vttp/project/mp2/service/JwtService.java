@@ -58,7 +58,6 @@ public class JwtService {
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
-        System.out.println(REFRESH_EXPIRY);
         return buildToken(new HashMap<>(), userDetails, REFRESH_EXPIRY);
     }
 

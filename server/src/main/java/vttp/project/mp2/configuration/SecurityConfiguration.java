@@ -29,17 +29,27 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            .authorizeHttpRequests(auth ->
-                auth.requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/favicon.ico").permitAll()
-                    .requestMatchers("/error").permitAll()
-                    .anyRequest().authenticated()
-            )
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/", "/index.html").permitAll()
+                        .requestMatchers("/*.js").permitAll()
+                        .requestMatchers("/*.css").permitAll()
+                        .requestMatchers("/*.png").permitAll()
+                        .requestMatchers("/*.jpg").permitAll()
+                        .requestMatchers("/*.json").permitAll()
+                        .requestMatchers("/fonts/**").permitAll()
+                        .requestMatchers("/icons/**").permitAll()
+                        .requestMatchers("/media/**").permitAll() 
+                        .requestMatchers("/assets/**").permitAll() 
+                        .requestMatchers("/phaser/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

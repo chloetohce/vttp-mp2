@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { EventBus } from './bootstrap/eventbus';
 import { select, Store } from '@ngrx/store';
 import { AUTO, Game } from 'phaser';
@@ -14,16 +14,16 @@ import { EditorComponent } from './editor/editor.component';
 import { CodeExecutionService } from '../../services/game/code-execution.service';
 import { getPlayerData } from '../../store/player/player.action';
 import { selectUsername } from '../../store/authentication/auth.store';
-import { firstValueFrom, take } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Subject, take } from 'rxjs';
 import { AppState } from '../../store/app.store';
 import { selectStage } from '../../store/player/player.store';
 import { PlayerService } from '../../services/player.service';
 import { GameStateService } from '../../services/game/game-state.service';
-import { Inventory } from './scenes/Inventory';
 import { Bots } from './scenes/Bots';
 import { EditBot } from './scenes/EditBot';
 import { EndDay } from './scenes/EndDay';
 import { GameOver } from './scenes/GameOver';
+import { Map } from './scenes/Map';
 
 @Component({
   selector: 'app-game',
@@ -39,11 +39,13 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(EditorComponent) editorComponent!: EditorComponent
 
+
   scene!: Phaser.Scene;
   game!: Phaser.Game;
   sceneCallback!: (scene: Phaser.Scene) => void;
 
   isEditorActive: boolean = false;
+  botCode: string = ''
 
   private config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
@@ -56,7 +58,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
       height: window.innerHeight,
     },
     pixelArt: true,
-    scene: [Boot, Tutorial, Dialogue, Menu, Lesson, Editor, EditBot, EndDay ,Inventory, GameOver, Bots],
+    scene: [Boot, Tutorial, Dialogue, Menu, Lesson, Editor, EditBot, EndDay, GameOver,Map, Bots],
   };
 
   async ngOnInit() {
@@ -91,9 +93,11 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
     })
     .on('editor-scene-active', (isActive: boolean) => {
       this.isEditorActive = isActive;
+      this.botCode = ''
     })
     .on('editor-bot-active', (isActive: boolean, code: string) => {
       this.isEditorActive = isActive;
+      this.botCode = code ? code : '';
     })
   }
 

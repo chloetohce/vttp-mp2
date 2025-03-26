@@ -1,0 +1,35 @@
+{
+    "start": {
+      "id": "start",
+      "text": "Looking to buy anything? A basic bot costs 30 gees.",
+      "choices": [
+        {
+          "text": "Just a basic bot (cost 30G)",
+          "next": "buy",
+          "condition": {
+            "key": "GOLD",
+            "payload": 30
+          },
+          "effect": [
+            {
+              "type": "GAIN_BOT"
+            },
+            {
+                "type": "CHANGE_GOLD",
+                "payload": -30
+            }
+          ]
+        },
+        {
+          "text": "Leave",
+          "next": "end"
+        }
+      ]
+    },
+    "end" :{
+        "text": "..."
+    },
+    "buy": {
+        "text": "Here ya go."
+    }
+}

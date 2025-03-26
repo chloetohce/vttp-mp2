@@ -1,4 +1,4 @@
     <ngx-monaco-editor [options]="editorOptions" [ngClass]="isActive ? '' : 'hide'"
-        (onInit)="onEditorInit($event)" #editorElement>
+        (onInit)="onEditorInit($event)" [(ngModel)]="code" #editorElement>
         
     </ngx-monaco-editor>

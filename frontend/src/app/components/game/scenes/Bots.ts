@@ -50,7 +50,7 @@ export class Bots extends Phaser.Scene {
       .setOrigin(0)
     this.add
       .text(this.width / 2, this.height * 0.03, 'YOUR BOTS', {
-        fontFamily: 'Arial',
+        fontFamily: 'vcr',
         fontSize: '24px',
         color: '#ffffff',
         align: 'center',
@@ -108,6 +108,7 @@ export class Bots extends Phaser.Scene {
       // Bot name and details
       this.add
         .text(this.width * 0.25 + 20, y - 25, bot.name, {
+          fontFamily: 'vcr',
           fontSize: '18px',
           color: '#020300',
           fontStyle: 'bold',

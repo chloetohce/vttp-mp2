@@ -1,0 +1,27 @@
+{
+    "start": {
+        "speaker": "Kade",
+        "type": "text",
+        "text": "Ever heard of the DRY pricniple? To avoid writing the same code over and over, we let computers handle repetitive tasks through loops.",
+        "next": "intro"
+    },
+    "intro": {
+        "speaker": "Kade",
+        "text": "A loop is a programming tool that allows developers to repeat the same block of code until some condition is met. ",
+        "next": "type"
+    },
+    "type": {
+        "speaker": "Kade",
+        "text": "There are 3 types of loops: a while loop, a for loop and a for-each loop. ",
+        "next": "for"
+    },
+    "for": {
+        "speaker": "Kade",
+        "text": "The basic structure is this: for (int i = 0; i < 5; i++) { }. The variable i is first initialised at 0, and incremented by 1 each loop. The loop continues until the condition i < 5 is no longer true (i.e. after the fifth loop).",
+        "next": "each"
+    }, 
+    "each": {
+        "speaker":"Kade",
+        "text": "For-each loops, on the other hand, are used when we loop iterable collections, especially when we do not care about the index, only the element itself. Let's now try for-each loops, using for (int i : List.of(1,2,3)) { }!"
+    }
+}

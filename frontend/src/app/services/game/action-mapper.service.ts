@@ -10,19 +10,20 @@ import { Bot } from '../../model/player-data.model';
 })
 export class ActionMapperService {
   private store = inject(Store);
+  private conditions = inject(ConditionsHolder)
   private actionMap: Record<string, GameAction> = ACTIONS;
-  private conditionMap: Record<string, (payload?: any) => boolean> = ConditionsHolder.CONDITIONS;
+  private conditionMap: Record<string, (payload?: any) => boolean> = this.conditions.CONDITIONS
 
   constructor() {}
   
   dispatchActionString(key: string, payload?: any) {
-    console.log(key)
-    console.log(payload)
     const act = this.actionMap[key]
     
     if (!act) {
       console.warn(`Action ${key} not registered.`)
     }
+
+    console.log(`action selected - ${key}: ${payload}`) 
 
     if (act.action) {
       if (key === 'GAIN_BOT') {

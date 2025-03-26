@@ -17,11 +17,11 @@ export const ACTIONS: Record<string, GameAction> = {
             item: ITEMS['INJECTOR']
         })
     },
-    "GAIN_HP": {
-        type: '[Game] Gain HP',
+    "CHANGE_HP": {
+        type: '[Game] Change HP',
         action: (payload: any) => ({
-            type: '[Game] Gain HP',
-            item: payload
+            type: '[Game] Change HP',
+            payload: payload
         })
     },
     "INCREASE_STAGE": {
@@ -31,7 +31,21 @@ export const ACTIONS: Record<string, GameAction> = {
         type: '[Game] Gain Basic Bot',
         action: (payload: any) => ({
             type: '[Game] Gain Basic Bot',
-            item: payload
+            payload: payload
+        })
+    },
+    "CHANGE_GOLD": {
+        type: '[Game] Change Gold',
+        action: (payload: any) => ({
+            type: '[Game] Change Gold',
+            payload: payload
+        })
+    },
+    "CHANGE_ENERGY": {
+        type: '[Game] Change Energy',
+        action: (payload: any) =>({
+            type: '[Game] Change Energy',
+            payload: payload
         })
     }
 }

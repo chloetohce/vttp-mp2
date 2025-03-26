@@ -15,13 +15,6 @@ export class DialogueManager {
         this.dialogueData = data;
         this.actionMapper = actionMapper
     }
-    
-    // loadDialogue(key: string) {
-    //     this.http.get<Record<string, DialogueNode>>(`assets/dialogues/${key}.json`)
-    //         .pipe(
-    //             tap(data => this.dialogueData = data)
-    //         )
-    // }
 
     start() {
         this.currentNode = this.dialogueData["start"];
@@ -32,19 +25,20 @@ export class DialogueManager {
      * Query to serve next dialogue option
      * @param choiceIndex when choosing user input dialogue
      */
-    next(choiceIndex?: number): DialogueNode | null {
+    next(choiceText?: string): DialogueNode | null {
         if (!this.currentNode) {
             return null;
         }
 
         let nextNodeKey: string | undefined;
 
+        const choiceIndex = this.currentNode.choices?.findIndex(node => node.text == choiceText)
+
         // If choices exist and a choice index is provided
         if (this.currentNode.choices && choiceIndex !== undefined && this.currentNode.choices[choiceIndex]) {
             const currChoiceNode = this.currentNode.choices[choiceIndex]
             if (currChoiceNode.effect) {
                 for (const e of currChoiceNode.effect) {
-                    console.log(e.payload)
                     this.actionMapper.dispatchActionString(e.type, e.payload)
                 }
 

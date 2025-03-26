@@ -21,7 +21,6 @@ export class PlayerEffects {
             ofType(getPlayerData),
             switchMap((action) => {
                 return this.playerService.getPlayerData(action.username).pipe(
-                    tap(r => console.log(r)),
                     map((r) => setPlayerData({data: r})),
                     catchError((error) => of(getPlayerDataFailure({error: error})))
                 )
@@ -34,7 +33,6 @@ export class PlayerEffects {
             ofType(endDay),
             withLatestFrom(this.store.select(selectPlayerState)),
             switchMap(([action, gameState]) => {
-                console.log(gameState)
                 const state: PlayerState = gameState as PlayerState;
                 return this.playerService.updatePlayerData(state)
                     .pipe(

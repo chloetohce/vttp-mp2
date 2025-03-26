@@ -149,7 +149,7 @@ export class Menu extends Phaser.Scene {
         const button = this.add.image(0, 0, `icon-${key}`)
             .setScale(2)
         const label = this.add.text(0, button.getBottomCenter().y + 10, key,{
-            fontSize: '12px',
+            font: '16px vcr',
             color: '#EFF3F3',
             align: 'center'
         })
@@ -158,7 +158,6 @@ export class Menu extends Phaser.Scene {
             
         button.setInteractive({useHandCursor: true})
             .on('pointerover', () => {
-                // console.log(key)
                 button.setTint(0xaaaaaa)
                 label.setTint(0xaaaaaa)
             })

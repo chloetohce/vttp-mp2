@@ -33,9 +33,6 @@ export class Boot extends Phaser.Scene {
   }
 
   preload() {
-    // this.load.plugin('rexanchorplugin',
-    //     'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js',
-    //     true);
     this.store.dispatch(getPlayerData({username: this.username}))
   }
 
@@ -43,7 +40,7 @@ export class Boot extends Phaser.Scene {
     // Create loading text
     this.loadingText = this.add
       .text(this.width / 2 - 50, this.height / 2, 'Loading', {
-        font: '24px',
+        font: '24px vcr',
         color: '#ffffff',
       })
       .setOrigin(0);
@@ -86,12 +83,11 @@ export class Boot extends Phaser.Scene {
 
     this.hideLoading()
 
-    
 
     // Start the appropriate scene based on the stage
     if (this.stage === 0) {
       this.scene.start(SCENES.TUTORIAL);
-    } else {
+    } else {  
       this.scene.start(SCENES.MENU);
     }
   }

@@ -37,25 +37,16 @@ export class Tutorial extends Phaser.Scene {
             10, 10, 10, 10
         ).setOrigin(0.5, 0.5);
 
-        // anchor.add(border, {
-        //     centerX: 'center',
-        //     centerY: 'center'
-        // })
 
         let dialogue = this.scene.launch(SCENES.DIALOGUE, {key: 'tutorial', speaker: 'embra'})
 
         EventBus.on('dialogue-end', () => {
-            console.log('dialogue end')
             this.store.dispatch(increaseStage({currStage: 0}))
-            // this.store.dispatch(endDay())
             this.scene.stop(SCENES.DIALOGUE)
             this.scene.start(SCENES.ENDDAY)
+            EventBus.emit('dialogue-end-close')
         })
 
-        // border.setInteractive({useHandCursor: true})
-        //     .on('pointerup', () => {
-        //         this.scene.setVisible(!this.scene.isVisible('dialogue'), 'dialogue')
-        //     })
     }
 
     override update(time: number, delta: number): void {

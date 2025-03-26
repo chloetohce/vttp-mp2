@@ -41,9 +41,7 @@ export class EditBot extends Phaser.Scene {
     }
 
     create() {
-        
         EventBus.emit('editor-bot-active', true, this.bot.code);
-        console.log(this.bot.code)
         this.scene.launch(SCENES.DIALOGUE, {key: this.bot.type, speaker: 'note'})
         
         // Display the bot's current details
@@ -72,6 +70,7 @@ export class EditBot extends Phaser.Scene {
           this.scene.start(SCENES.BOTS)
           this.scene.stop(SCENES.DIALOGUE)
           EventBus.emit('editor-scene-active', false)
+          EventBus.emit('dialogue-end-close')
         })
         .on('pointerover', () => {
           this.btnBack.setTint(0xaaaaaa)
@@ -87,9 +86,9 @@ export class EditBot extends Phaser.Scene {
     }
 
     private saveBotChanges(updatedBot: Bot) {
-        console.log('Saving bot changes:', updatedBot);
         EventBus.emit('editor-bot-update-code', this.bot.name)
         EventBus.emit('editor-bot-active', false)
+        EventBus.emit('dialogue-end-close')
         this.scene.sleep()
         this.scene.start(SCENES.BOTS); // Return to the Bots scene
     }

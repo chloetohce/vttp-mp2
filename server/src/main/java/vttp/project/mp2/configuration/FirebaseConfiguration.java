@@ -2,14 +2,9 @@ package vttp.project.mp2.configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.logging.Logger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
@@ -22,11 +17,15 @@ public class FirebaseConfiguration {
 
     @Bean
     public Firestore firestore() throws IOException {
-        File resource = new ClassPathResource("static/firebaseservice.json")
-        .getFile();
+        InputStream stream = getClass().getClassLoader()
+            .getResourceAsStream("firebaseservice.json");
+
+        if (stream == null) {
+            System.err.println("firebaseservice not found in class path");
+        }
         
-        try (InputStream in = new FileInputStream(resource)) {
-            GoogleCredentials credentials = GoogleCredentials.fromStream(in);
+        try {
+            GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(credentials)
                     .build();
@@ -40,6 +39,8 @@ public class FirebaseConfiguration {
             
             Firestore firestore = FirestoreClient.getFirestore(app);
             return firestore;
+        } finally {
+            stream.close();
         }
     }
 }

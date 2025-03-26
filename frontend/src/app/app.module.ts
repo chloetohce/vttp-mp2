@@ -8,7 +8,7 @@ import { providePrimeNG } from 'primeng/config';
 import { PrimeNGPreset } from './modules/primeng/preset';
 import { PrimengModule } from './modules/primeng/primeng.module';
 import { LoginComponent } from './components/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { GameComponent } from './components/game/game.component';
 import { AuthInterceptor } from './services/authentication/AuthInterceptor';
@@ -42,10 +42,13 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AppRoutingModule,
     PrimengModule,
     ReactiveFormsModule,
+    FormsModule,
     StoreModule.forRoot<AppState>({auth: authReducer, player: playerReducer}),
     EffectsModule.forRoot([AuthEffects, PlayerEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    MonacoEditorModule.forRoot(),
+    MonacoEditorModule.forRoot({
+      defaultOptions: {scrollBeyondLastLine: false}
+    }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'

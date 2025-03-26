@@ -53,7 +53,7 @@ export class EndDay extends Phaser.Scene {
             this.height / 2, 
             'Calculating', 
             { 
-                font: '24px Arial',
+                font: '24px vcr',
                 color: '#ffffff'
             }
         ).setOrigin(0.5);
@@ -93,7 +93,6 @@ export class EndDay extends Phaser.Scene {
     }
     
     private async fetchNextDayData() {
-        console.log("fetching data")
         // Show loading UI
         this.showLoading();
     
@@ -106,7 +105,6 @@ export class EndDay extends Phaser.Scene {
                     take(1)
                 )
             );
-            console.log(this.results);
             
             // Hide loading UI
             this.hideLoading();
@@ -187,7 +185,7 @@ export class EndDay extends Phaser.Scene {
             this.height / 2,
             message,
             {
-                font: '18px Arial',
+                font: '18px vcr',
                 color: '#ff0000'
             }
         ).setOrigin(0.5);

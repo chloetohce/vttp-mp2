@@ -48,19 +48,16 @@ public class BotRepository {
             Query q = new Query(new Criteria("_id").is(b.getId()));
             Document doc = mongoTemplate.findOne(q, Document.class, "bots");
             b.setCode(doc.getString("code"));
-            System.out.println("Getting bot: " + b.toString());
         }
         return bots;
     }
 
     public void updateBots(List<Bot> bots, String username) throws InterruptedException, ExecutionException {
-        System.out.println("UPDATING BOTS " + bots.toString());
         List<Bot> toAdd = bots.stream()
             .filter(b -> b.getId() == 0)
             .toList();
         if (!toAdd.isEmpty()) {
             for (Bot bot : toAdd) {
-                System.out.println("BOT ID" + bot.getId());
                 KeyHolder keyHolder = new GeneratedKeyHolder();
                 
                 jdbcTemplate.update(connection -> {
@@ -81,9 +78,7 @@ public class BotRepository {
             }
         }
         
-        System.out.println("UPDATING MONGO");
         for (Bot bot : bots) {
-            System.out.println("BOT TO BE ADDED TO MONGO" + bot.toString());
             Query q = new Query(new Criteria("_id").is(bot.getId()))
                 .limit(1);
             Update ops = new Update()

@@ -2,12 +2,12 @@
 @import "primeicons/primeicons.css";
 
 @font-face {
-    font-family: 'Spock';
-    src: url('/fonts/Fontspring-DEMO-spockess-regular.otf') format("opentype");
+    font-family: 'vcr';
+    src: url('/fonts/VCR_MONO.ttf') format("truetype");
 }
 
 body {
-    font-family: 'Spock', sans-serif;
+    font-family: 'vcr', sans-serif;
     background-color: var(--p-page-background);
 }
 

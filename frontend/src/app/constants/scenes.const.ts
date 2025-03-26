@@ -3,14 +3,14 @@ export const SCENES = {
     TUTORIAL: 'tutorial',
     DIALOGUE: 'dialogue',
     MENU: 'menu',
-    FORUM: 'forum',
     LESSON: 'lesson',
     EDITOR: 'editor',
     INVENTORY: 'inventory',
     BOTS: 'bots',
     EDITBOT: 'editBots',
     ENDDAY: 'endDay',
-    GAMEOVER: 'gameOver'
+    GAMEOVER: 'gameOver',
+    MAP: 'map'
 }
 
 export const STAGES = [
